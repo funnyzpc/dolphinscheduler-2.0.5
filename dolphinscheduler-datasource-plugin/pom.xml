@@ -36,5 +36,6 @@
         <module>dolphinscheduler-datasource-postgresql</module>
         <module>dolphinscheduler-datasource-api</module>
         <module>dolphinscheduler-datasource-all</module>
+        <module>dolphinscheduler-datasource-saphana</module>
     </modules>
 </project>

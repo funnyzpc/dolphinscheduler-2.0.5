@@ -127,15 +127,14 @@ public class TaskExecuteThread implements Runnable, Delayed {
         TaskExecuteResponseCommand responseCommand = new TaskExecuteResponseCommand(taskExecutionContext.getTaskInstanceId(), taskExecutionContext.getProcessInstanceId());
         try {
             logger.info("script path : {}", taskExecutionContext.getExecutePath());
-            // check if the OS user exists
-            if (!OSUtils.getUserList().contains(taskExecutionContext.getTenantCode())) {
-                String errorLog = String.format("tenantCode: %s does not exist", taskExecutionContext.getTenantCode());
-                logger.error(errorLog);
-                responseCommand.setStatus(ExecutionStatus.FAILURE.getCode());
-                responseCommand.setEndTime(new Date());
-                return;
-            }
-
+            // TODO::这里判断用户意义不大 check if the OS user exists
+//            if (!OSUtils.getUserList().contains(taskExecutionContext.getTenantCode())) {
+//                String errorLog = String.format("tenantCode: %s does not exist", taskExecutionContext.getTenantCode());
+//                logger.error(errorLog);
+//                responseCommand.setStatus(ExecutionStatus.FAILURE.getCode());
+//                responseCommand.setEndTime(new Date());
+//                return;
+//            }
             if (taskExecutionContext.getStartTime() == null) {
                 taskExecutionContext.setStartTime(new Date());
             }

@@ -17,6 +17,7 @@
 <template>
   <div class="form-model-wrapper" v-clickoutside="_handleClose">
     <div class="title-box">
+      <!-- 当前节点设置 -->
       <span class="name">{{ $t("Current node settings") }}</span>
       <span class="go-subtask">
         <!-- Component can't pop up box to do component processing -->

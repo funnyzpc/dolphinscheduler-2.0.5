@@ -111,6 +111,11 @@ export default {
       id: 8,
       code: 'PRESTO',
       disabled: false
+    },
+    {
+      id: 10,
+      code: 'SAPHANA',
+      disabled: false
     }
   ],
   // Alarm interface

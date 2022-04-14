@@ -31,13 +31,13 @@ import org.powermock.modules.junit4.PowerMockRunner;
 
 @RunWith(PowerMockRunner.class)
 @SuppressStaticInitializationFor("org.apache.dolphinscheduler.plugin.datasource.api.client.CommonDataSourceClient")
-@PrepareForTest({MysqlDataSourceClient.class, MysqlDataSourceChannel.class})
-public class MysqlDataSourceChannelTest {
+@PrepareForTest({SapHanaDataSourceClient.class, SapHanaDataSourceChannel.class})
+public class SapHanaDataSourceChannelTest {
 
     @Test
     public void testCreateDataSourceClient() {
-        MysqlDataSourceChannel sourceChannel = PowerMockito.mock(MysqlDataSourceChannel.class);
-        MysqlDataSourceClient dataSourceClient = PowerMockito.mock(MysqlDataSourceClient.class);
+        SapHanaDataSourceChannel sourceChannel = PowerMockito.mock(SapHanaDataSourceChannel.class);
+        SapHanaDataSourceClient dataSourceClient = PowerMockito.mock(SapHanaDataSourceClient.class);
         PowerMockito.when(sourceChannel.createDataSourceClient(Mockito.any(), Mockito.any())).thenReturn(dataSourceClient);
         Assert.assertNotNull(sourceChannel.createDataSourceClient(new MysqlConnectionParam(), DbType.MYSQL));
     }

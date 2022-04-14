@@ -109,7 +109,7 @@ public class HadoopUtils implements Closeable {
         Path path = new Path(resourceUploadPath);
 
         try {
-            if (!fs.exists(path)) {
+            if (null!=fs && !fs.exists(path)) {
                 fs.mkdirs(path);
             }
         } catch (Exception e) {

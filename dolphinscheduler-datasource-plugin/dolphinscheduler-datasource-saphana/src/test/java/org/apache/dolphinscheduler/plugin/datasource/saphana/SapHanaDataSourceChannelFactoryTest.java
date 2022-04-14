@@ -22,11 +22,11 @@ import org.apache.dolphinscheduler.spi.datasource.DataSourceChannel;
 import org.junit.Assert;
 import org.junit.Test;
 
-public class MysqlDataSourceChannelFactoryTest {
+public class SapHanaDataSourceChannelFactoryTest {
 
     @Test
     public void testCreate() {
-        MysqlDataSourceChannelFactory sourceChannelFactory = new MysqlDataSourceChannelFactory();
+        SapHanaDataSourceChannelFactory sourceChannelFactory = new SapHanaDataSourceChannelFactory();
         DataSourceChannel dataSourceChannel = sourceChannelFactory.create();
         Assert.assertNotNull(dataSourceChannel);
     }
