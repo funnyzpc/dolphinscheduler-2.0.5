@@ -17,8 +17,10 @@
 
 import io from '@/module/axios/index'
 import cookies from 'js-cookie'
+// const env = require('dotenv').config()
+const apiPrefix = (process.env.NODE_ENV === 'production') ? '/dolphinscheduler-api' : '/dolphinscheduler'
 
-const apiPrefix = '/dolphinscheduler'
+// const apiPrefix = '/dolphinscheduler'
 const reSlashPrefix = /^\/+/
 
 const resolveURL = (url) => {
@@ -26,6 +28,7 @@ const resolveURL = (url) => {
     return url
   }
   if (url.charAt(0) !== '/') {
+    // return `${apiPrefix}/${url.replace(reSlashPrefix, '')}`
     return `${apiPrefix}/${url.replace(reSlashPrefix, '')}`
   }
 

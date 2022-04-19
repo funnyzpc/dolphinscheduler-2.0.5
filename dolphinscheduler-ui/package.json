@@ -12,7 +12,7 @@
     "start": "npm run dev",
     "lint": "eslint --ext .js,.vue ./src",
     "lint:fix": "eslint --ext .js,.vue --fix ./src",
-    "build:release": "npm run clean && cross-env NODE_ENV=production PUBLIC_PATH=/dolphinscheduler/ui webpack --config ./build/webpack.config.release.js"
+    "build:release": "npm run clean && cross-env NODE_ENV=production PUBLIC_PATH=/dolphinscheduler webpack --config ./build/webpack.config.release.js"
   },
   "dependencies": {
     "@antv/layout": "^0.1.18",
