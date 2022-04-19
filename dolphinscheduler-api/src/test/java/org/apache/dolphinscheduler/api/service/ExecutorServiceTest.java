@@ -149,7 +149,7 @@ public class ExecutorServiceTest {
         Mockito.when(processDefinitionMapper.queryByCode(processDefinitionCode)).thenReturn(processDefinition);
         Mockito.when(processService.getTenantForProcess(tenantId, userId)).thenReturn(new Tenant());
         Mockito.when(processService.createCommand(any(Command.class))).thenReturn(1);
-        Mockito.when(monitorService.getServerListFromRegistry(true)).thenReturn(getMasterServersList());
+//        Mockito.when(monitorService.getServerListFromRegistry(true)).thenReturn(getMasterServersList());
         Mockito.when(processService.findProcessInstanceDetailById(processInstanceId)).thenReturn(processInstance);
         Mockito.when(processService.findProcessDefinition(1L, 1)).thenReturn(processDefinition);
     }
@@ -260,19 +260,19 @@ public class ExecutorServiceTest {
 
     }
 
-    @Test
-    public void testNoMasterServers() {
-        Mockito.when(monitorService.getServerListFromRegistry(true)).thenReturn(new ArrayList<>());
-
-        Map<String, Object> result = executorService.execProcessInstance(loginUser, projectCode,
-                processDefinitionCode, cronTime, CommandType.COMPLEMENT_DATA,
-                null, null,
-                null, null, 0,
-                RunMode.RUN_MODE_PARALLEL,
-                Priority.LOW, Constants.DEFAULT_WORKER_GROUP, 100L,110, null, 0, Constants.DRY_RUN_FLAG_NO);
-        Assert.assertEquals(result.get(Constants.STATUS), Status.MASTER_NOT_EXISTS);
-
-    }
+//    @Test
+//    public void testNoMasterServers() {
+//        Mockito.when(monitorService.getServerListFromRegistry(true)).thenReturn(new ArrayList<>());
+//
+//        Map<String, Object> result = executorService.execProcessInstance(loginUser, projectCode,
+//                processDefinitionCode, cronTime, CommandType.COMPLEMENT_DATA,
+//                null, null,
+//                null, null, 0,
+//                RunMode.RUN_MODE_PARALLEL,
+//                Priority.LOW, Constants.DEFAULT_WORKER_GROUP, 100L,110, null, 0, Constants.DRY_RUN_FLAG_NO);
+//        Assert.assertEquals(result.get(Constants.STATUS), Status.MASTER_NOT_EXISTS);
+//
+//    }
 
     @Test
     public void testExecuteRepeatRunning() {

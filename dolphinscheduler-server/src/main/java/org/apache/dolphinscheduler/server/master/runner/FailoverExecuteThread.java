@@ -41,11 +41,11 @@ public class FailoverExecuteThread extends Thread {
 
     private static final Logger logger = LoggerFactory.getLogger(FailoverExecuteThread.class);
 
-    @Autowired
-    private MasterRegistryClient masterRegistryClient;
+//    @Autowired
+//    private MasterRegistryClient masterRegistryClient;
 
-    @Autowired
-    private RegistryClient registryClient;
+//    @Autowired
+//    private RegistryClient registryClient;
 
     @Autowired
     private MasterConfig masterConfig;
@@ -73,17 +73,17 @@ public class FailoverExecuteThread extends Thread {
                 }
                 logger.info("need failover hosts:{}", hosts);
 
-                for (String host : hosts) {
-                    String failoverPath = masterRegistryClient.getFailoverLockPath(NodeType.MASTER, host);
-                    try {
-                        registryClient.getLock(failoverPath);
-                        masterRegistryClient.failoverMaster(host);
-                    } catch (Exception e) {
-                        logger.error("{} server failover failed, host:{}", NodeType.MASTER, host, e);
-                    } finally {
-                        registryClient.releaseLock(failoverPath);
-                    }
-                }
+//                for (String host : hosts) {
+//                    String failoverPath = masterRegistryClient.getFailoverLockPath(NodeType.MASTER, host);
+//                    try {
+//                        registryClient.getLock(failoverPath);
+//                        masterRegistryClient.failoverMaster(host);
+//                    } catch (Exception e) {
+//                        logger.error("{} server failover failed, host:{}", NodeType.MASTER, host, e);
+//                    } finally {
+//                        registryClient.releaseLock(failoverPath);
+//                    }
+//                }
             } catch (Exception e) {
                 logger.error("failover execute error", e);
             } finally {
@@ -96,15 +96,15 @@ public class FailoverExecuteThread extends Thread {
         // failover myself && failover dead masters
         List<String> hosts = processService.queryNeedFailoverProcessInstanceHost();
 
-        Iterator<String> iterator = hosts.iterator();
-        while (iterator.hasNext()) {
-            String host = iterator.next();
-            if (registryClient.checkNodeExists(host, NodeType.MASTER)) {
-                if (!host.equals(masterRegistryClient.getLocalAddress())) {
-                    iterator.remove();
-                }
-            }
-        }
+//        Iterator<String> iterator = hosts.iterator();
+//        while (iterator.hasNext()) {
+//            String host = iterator.next();
+//            if (registryClient.checkNodeExists(host, NodeType.MASTER)) {
+////                if (!host.equals(masterRegistryClient.getLocalAddress())) {
+//                    iterator.remove();
+////                }
+//            }
+//        }
         return hosts;
     }
 }

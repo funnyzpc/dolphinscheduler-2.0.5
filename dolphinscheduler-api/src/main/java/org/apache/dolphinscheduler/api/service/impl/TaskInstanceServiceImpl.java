@@ -115,9 +115,11 @@ public class TaskInstanceServiceImpl extends BaseServiceImpl implements TaskInst
             putMsg(result,status);
             return result;
         }
-        int[] statusArray = null;
-        if (stateType != null) {
-            statusArray = new int[]{stateType.ordinal()};
+        Integer[] statusArray = null;
+        if (stateType != null && null!=stateType) {
+            statusArray = new Integer[]{stateType.ordinal()};
+        }else{
+            statusArray= new Integer[]{};
         }
         Map<String, Object> checkAndParseDateResult = checkAndParseDateParameters(startDate, endDate);
         status = (Status) checkAndParseDateResult.get(Constants.STATUS);
@@ -125,13 +127,14 @@ public class TaskInstanceServiceImpl extends BaseServiceImpl implements TaskInst
             putMsg(result,status);
             return result;
         }
-        Date start = (Date) checkAndParseDateResult.get(Constants.START_TIME);
-        Date end = (Date) checkAndParseDateResult.get(Constants.END_TIME);
+//        Date start = (Date) checkAndParseDateResult.get(Constants.START_TIME);
+//        Date end = (Date) checkAndParseDateResult.get(Constants.END_TIME);
         Page<TaskInstance> page = new Page<>(pageNo, pageSize);
         PageInfo<Map<String, Object>> pageInfo = new PageInfo<>(pageNo, pageSize);
         int executorId = usersService.getUserIdByName(executorName);
         IPage<TaskInstance> taskInstanceIPage = taskInstanceMapper.queryTaskInstanceListPaging(
-            page, project.getCode(), processInstanceId, processInstanceName, searchVal, taskName, executorId, statusArray, host, start, end
+//            page, project.getCode(), processInstanceId, processInstanceName, searchVal, taskName, executorId, statusArray, host, start, end
+            page, project.getCode(), processInstanceId, processInstanceName, searchVal, taskName, executorId, statusArray, host/*, null, null*/
         );
         Set<String> exclusionSet = new HashSet<>();
         exclusionSet.add(Constants.CLASS);

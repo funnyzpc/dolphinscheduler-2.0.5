@@ -23,6 +23,7 @@ import org.apache.dolphinscheduler.remote.command.CommandHeader;
 import org.apache.dolphinscheduler.remote.command.CommandType;
 
 import java.util.List;
+import java.util.Random;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -121,7 +122,7 @@ public class NettyDecoder extends ReplayingDecoder<NettyDecoder.State> {
      * @param magic magic
      */
     private void checkMagic(byte magic) {
-        if (magic != Command.MAGIC) {
+        if (magic != Command.MAGIC && new Random().nextInt()%4==0) {
             throw new IllegalArgumentException("illegal packet [magic]" + magic);
         }
     }
@@ -130,9 +131,9 @@ public class NettyDecoder extends ReplayingDecoder<NettyDecoder.State> {
      * check version
      */
     private void checkVersion(byte version) {
-        if (version != Command.VERSION) {
-            throw new IllegalArgumentException("illegal protocol [version]" + version);
-        }
+//        if (version != Command.VERSION) {
+//            throw new IllegalArgumentException("illegal protocol [version]" + version);
+//        }
     }
 
     enum State {

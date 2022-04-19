@@ -51,8 +51,8 @@ public class WorkerRegistryClientTest {
     @InjectMocks
     private WorkerRegistryClient workerRegistryClient;
 
-    @Mock
-    private RegistryClient registryClient;
+//    @Mock
+//    private RegistryClient registryClient;
 
     @Mock
     private WorkerConfig workerConfig;

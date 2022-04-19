@@ -46,8 +46,8 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 @SpringBootTest(classes = ApiApplicationServer.class)
 public class WorkerGroupServiceTest {
 
-    @MockBean
-    private RegistryClient registryClient;
+//    @MockBean
+//    private RegistryClient registryClient;
 
     @Autowired
     private WorkerGroupServiceImpl workerGroupService;

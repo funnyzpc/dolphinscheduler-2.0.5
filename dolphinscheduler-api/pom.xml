@@ -255,6 +255,20 @@
             </exclusions>
             <scope>test</scope>
         </dependency>
+
+        <!-- shadow -->
+        <dependency>
+            <groupId>org.apache.dolphinscheduler</groupId>
+            <artifactId>dolphinscheduler-remote</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>commons-lang</groupId>
+            <artifactId>commons-lang</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.dolphinscheduler</groupId>
+            <artifactId>dolphinscheduler-dao</artifactId>
+        </dependency>
     </dependencies>
 
     <build>

@@ -654,10 +654,10 @@ public class WorkflowExecuteThread implements Runnable {
     private TaskInstance submitTaskExec(TaskInstance taskInstance) {
         try {
             ITaskProcessor taskProcessor = TaskProcessorFactory.getTaskProcessor(taskInstance.getTaskType());
-            if (taskInstance.getState() == ExecutionStatus.RUNNING_EXECUTION
-                    && taskProcessor.getType().equalsIgnoreCase(Constants.COMMON_TASK_TYPE)) {
-                notifyProcessHostUpdate(taskInstance);
-            }
+//            if (taskInstance.getState() == ExecutionStatus.RUNNING_EXECUTION
+//                    && taskProcessor.getType().equalsIgnoreCase(Constants.COMMON_TASK_TYPE)) {
+//                notifyProcessHostUpdate(taskInstance);
+//            }
             taskProcessor.init(taskInstance, processInstance);
             boolean submit = taskProcessor.action(TaskAction.SUBMIT);
             if (submit) {

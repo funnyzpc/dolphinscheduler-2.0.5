@@ -156,7 +156,7 @@ public class WorkerServer implements IStoppable {
         // worker registry
         try {
             this.workerRegistryClient.registry();
-            this.workerRegistryClient.setRegistryStoppable(this);
+//            this.workerRegistryClient.setRegistryStoppable(this);
         } catch (Exception e) {
             logger.error("worker registry error", e);
             throw new RuntimeException(e);

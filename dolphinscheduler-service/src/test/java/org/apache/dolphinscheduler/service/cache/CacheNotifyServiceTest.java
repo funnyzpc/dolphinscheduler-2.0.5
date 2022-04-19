@@ -51,11 +51,11 @@ public class CacheNotifyServiceTest {
     @Rule
     public final ExpectedException exception = ExpectedException.none();
 
-    @InjectMocks
-    private CacheNotifyServiceImpl cacheNotifyService;
+//    @InjectMocks
+//    private CacheNotifyServiceImpl cacheNotifyService;
 
-    @Mock
-    private RegistryClient registryClient;
+//    @Mock
+//    private RegistryClient registryClient;
 
     @Test
     public void testNotifyMaster() {
@@ -77,9 +77,9 @@ public class CacheNotifyServiceTest {
         server.setPort(serverConfig.getListenPort());
         serverList.add(server);
 
-        Mockito.when(registryClient.getServerList(NodeType.MASTER)).thenReturn(serverList);
+//        Mockito.when(registryClient.getServerList(NodeType.MASTER)).thenReturn(serverList);
 
-        cacheNotifyService.notifyMaster(cacheExpireCommand);
+//        cacheNotifyService.notifyMaster(cacheExpireCommand);
 
         nettyRemotingServer.close();
     }

@@ -30,24 +30,24 @@ import org.springframework.stereotype.Component;
 @Component
 public class RegistryMonitorImpl extends AbstractMonitor {
 
-    @Autowired
-    private RegistryClient registryClient;
+//    @Autowired
+//    private RegistryClient registryClient;
 
-    @Override
-    protected Map<String, String> getActiveNodesByPath(String path) {
-
-        Map<String, String> maps = new HashMap<>();
-
-        Collection<String> childrenList = registryClient.getChildrenKeys(path);
-
-        if (childrenList == null) {
-            return maps;
-        }
-
-        for (String child : childrenList) {
-            maps.put(child.split("_")[0], child);
-        }
-
-        return maps;
-    }
+//    @Override
+//    protected Map<String, String> getActiveNodesByPath(String path) {
+//
+//        Map<String, String> maps = new HashMap<>();
+//
+//        Collection<String> childrenList = registryClient.getChildrenKeys(path);
+//
+//        if (childrenList == null) {
+//            return maps;
+//        }
+//
+//        for (String child : childrenList) {
+//            maps.put(child.split("_")[0], child);
+//        }
+//
+//        return maps;
+//    }
 }

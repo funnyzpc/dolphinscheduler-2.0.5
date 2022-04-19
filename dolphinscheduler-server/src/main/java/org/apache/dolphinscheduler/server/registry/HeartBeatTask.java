@@ -34,7 +34,7 @@ public class HeartBeatTask implements Runnable {
     private final Logger logger = LoggerFactory.getLogger(HeartBeatTask.class);
 
     private final Set<String> heartBeatPaths;
-    private final RegistryClient registryClient;
+//    private final RegistryClient registryClient;
     private WorkerManagerThread workerManagerThread;
     private final String serverType;
     private final HeartBeat heartBeat;
@@ -43,10 +43,10 @@ public class HeartBeatTask implements Runnable {
                          double maxCpuloadAvg,
                          double reservedMemory,
                          Set<String> heartBeatPaths,
-                         String serverType,
-                         RegistryClient registryClient) {
+                         String serverType/*,
+                         RegistryClient registryClient*/) {
         this.heartBeatPaths = heartBeatPaths;
-        this.registryClient = registryClient;
+//        this.registryClient = registryClient;
         this.serverType = serverType;
         this.heartBeat = new HeartBeat(startupTime, maxCpuloadAvg, reservedMemory);
     }
@@ -57,12 +57,12 @@ public class HeartBeatTask implements Runnable {
                          int hostWeight,
                          Set<String> heartBeatPaths,
                          String serverType,
-                         RegistryClient registryClient,
+//                         RegistryClient registryClient,
                          int workerThreadCount,
                          WorkerManagerThread workerManagerThread
     ) {
         this.heartBeatPaths = heartBeatPaths;
-        this.registryClient = registryClient;
+//        this.registryClient = registryClient;
         this.workerManagerThread = workerManagerThread;
         this.serverType = serverType;
         this.heartBeat = new HeartBeat(startupTime, maxCpuloadAvg, reservedMemory, hostWeight, workerThreadCount);
@@ -75,22 +75,22 @@ public class HeartBeatTask implements Runnable {
     @Override
     public void run() {
         try {
-            // check dead or not in zookeeper
-            for (String heartBeatPath : heartBeatPaths) {
-                if (registryClient.checkIsDeadServer(heartBeatPath, serverType)) {
-                    registryClient.getStoppable().stop("i was judged to death, release resources and stop myself");
-                    return;
-                }
-            }
+//            // check dead or not in zookeeper
+//            for (String heartBeatPath : heartBeatPaths) {
+//                if (registryClient.checkIsDeadServer(heartBeatPath, serverType)) {
+//                    registryClient.getStoppable().stop("i was judged to death, release resources and stop myself");
+//                    return;
+//                }
+//            }
 
             if (workerManagerThread != null) {
                 // update waiting task count
                 heartBeat.setWorkerWaitingTaskCount(workerManagerThread.getThreadPoolQueueSize());
             }
 
-            for (String heartBeatPath : heartBeatPaths) {
-                registryClient.persistEphemeral(heartBeatPath, heartBeat.encodeHeartBeat());
-            }
+//            for (String heartBeatPath : heartBeatPaths) {
+//                registryClient.persistEphemeral(heartBeatPath, heartBeat.encodeHeartBeat());
+//            }
         } catch (Throwable ex) {
             logger.error("error write heartbeat info", ex);
         }

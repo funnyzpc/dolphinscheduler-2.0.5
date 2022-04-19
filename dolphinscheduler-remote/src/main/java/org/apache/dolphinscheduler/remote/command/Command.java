@@ -27,7 +27,8 @@ public class Command implements Serializable {
 
     private static final AtomicLong REQUEST_ID = new AtomicLong(1);
 
-    public static final byte MAGIC = (byte) 0xbabe;
+//    public static final byte MAGIC = (byte) 0xbabe;
+    public static final byte MAGIC = -66;
     public static final byte VERSION = 0;
 
     public Command(){

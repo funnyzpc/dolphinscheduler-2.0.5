@@ -30,13 +30,16 @@ import org.apache.dolphinscheduler.dao.mapper.WorkerGroupMapper;
 import org.apache.dolphinscheduler.registry.api.Event;
 import org.apache.dolphinscheduler.registry.api.Event.Type;
 import org.apache.dolphinscheduler.registry.api.SubscribeListener;
+import org.apache.dolphinscheduler.remote.utils.Host;
 import org.apache.dolphinscheduler.remote.utils.NamedThreadFactory;
+import org.apache.dolphinscheduler.server.worker.config.WorkerConfig;
 import org.apache.dolphinscheduler.service.queue.MasterPriorityQueue;
 import org.apache.dolphinscheduler.service.registry.RegistryClient;
 
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
 
+import java.net.InetAddress;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -104,8 +107,8 @@ public class ServerNodeManager implements InitializingBean {
      */
     private ScheduledExecutorService executorService;
 
-    @Autowired
-    private RegistryClient registryClient;
+//    @Autowired
+//    private RegistryClient registryClient;
 
     /**
      * eg : /node/worker/group/127.0.0.1:xxx
@@ -117,6 +120,9 @@ public class ServerNodeManager implements InitializingBean {
      */
     @Autowired
     private WorkerGroupMapper workerGroupMapper;
+
+    @Autowired
+    private WorkerConfig workerConfig;
 
     private MasterPriorityQueue masterPriorityQueue = new MasterPriorityQueue();
 
@@ -145,42 +151,42 @@ public class ServerNodeManager implements InitializingBean {
      */
     @Override
     public void afterPropertiesSet() throws Exception {
-        /**
-         * load nodes from zookeeper
-         */
-        load();
+//        /**
+//         * load nodes from zookeeper
+//         */
+//        load();
         /**
          * init executor service
          */
         executorService = Executors.newSingleThreadScheduledExecutor(new NamedThreadFactory("ServerNodeManagerExecutor"));
         executorService.scheduleWithFixedDelay(new WorkerNodeInfoAndGroupDbSyncTask(), 0, 10, TimeUnit.SECONDS);
-        /*
-         * init MasterNodeListener listener
-         */
-        registryClient.subscribe(REGISTRY_DOLPHINSCHEDULER_MASTERS, new MasterDataListener());
-        /*
-         * init WorkerNodeListener listener
-         */
-        registryClient.subscribe(REGISTRY_DOLPHINSCHEDULER_WORKERS, new WorkerDataListener());
+//        /*
+//         * init MasterNodeListener listener
+//         */
+//        registryClient.subscribe(REGISTRY_DOLPHINSCHEDULER_MASTERS, new MasterDataListener());
+//        /*
+//         * init WorkerNodeListener listener
+//         */
+//        registryClient.subscribe(REGISTRY_DOLPHINSCHEDULER_WORKERS, new WorkerDataListener());
     }
 
-    /**
-     * load nodes from zookeeper
-     */
-    public void load() {
-        /*
-         * master nodes from zookeeper
-         */
-        updateMasterNodes();
-
-        /*
-         * worker group nodes from zookeeper
-         */
-        Collection<String> workerGroups = registryClient.getWorkerGroupDirectly();
-        for (String workerGroup : workerGroups) {
-            syncWorkerGroupNodes(workerGroup, registryClient.getWorkerGroupNodesDirectly(workerGroup));
-        }
-    }
+//    /**
+//     * load nodes from zookeeper
+//     */
+//    public void load() {
+//        /*
+//         * master nodes from zookeeper
+//         */
+//        updateMasterNodes();
+//
+//        /*
+//         * worker group nodes from zookeeper
+//         */
+//        Collection<String> workerGroups = registryClient.getWorkerGroupDirectly();
+//        for (String workerGroup : workerGroups) {
+//            syncWorkerGroupNodes(workerGroup, registryClient.getWorkerGroupNodesDirectly(workerGroup));
+//        }
+//    }
 
     /**
      * worker node info and worker group db sync task
@@ -190,131 +196,137 @@ public class ServerNodeManager implements InitializingBean {
         @Override
         public void run() {
             try {
+//                String addr = NetUtils.getAddr(workerConfig.getListenPort());
+//                Host host = new Host(addr);
+
                 // sync worker node info
-                Map<String, String> newWorkerNodeInfo = registryClient.getServerMaps(NodeType.WORKER, true);
-                syncAllWorkerNodeInfo(newWorkerNodeInfo);
+//                Map<String, String> newWorkerNodeInfo = registryClient.getServerMaps(NodeType.WORKER, true);
+//                syncAllWorkerNodeInfo(newWorkerNodeInfo);
 
                 // sync worker group nodes from database
-                List<WorkerGroup> workerGroupList = workerGroupMapper.queryAllWorkerGroup();
-                if (CollectionUtils.isNotEmpty(workerGroupList)) {
-                    for (WorkerGroup wg : workerGroupList) {
-                        String workerGroup = wg.getName();
-                        Set<String> nodes = new HashSet<>();
-                        String[] addrs = wg.getAddrList().split(Constants.COMMA);
-                        for (String addr : addrs) {
-                            if (newWorkerNodeInfo.containsKey(addr)) {
-                                nodes.add(addr);
-                            }
-                        }
-                        if (!nodes.isEmpty()) {
-                            syncWorkerGroupNodes(workerGroup, nodes);
-                        }
-                    }
-                }
+//                List<WorkerGroup> workerGroupList = workerGroupMapper.queryAllWorkerGroup();
+//                if (CollectionUtils.isNotEmpty(workerGroupList)) {
+//                    for (WorkerGroup wg : workerGroupList) {
+//                        String workerGroup = wg.getName();
+//                        Set<String> nodes = new HashSet<>();
+//                        String[] addrs = wg.getAddrList().split(Constants.COMMA);
+//                        for (String addr : addrs) {
+//                            if (newWorkerNodeInfo.containsKey(addr)) {
+//                                nodes.add(addr);
+//                            }
+//                        }
+//                        if (!nodes.isEmpty()) {
+//                            syncWorkerGroupNodes(workerGroup, nodes);
+//                        }
+//                    }
+//                }
+
+                String addr = NetUtils.getAddr(workerConfig.getListenPort());
+                syncWorkerGroupNodes(InetAddress.getLocalHost().getHostName(), new HashSet<String>(){{add(addr);}});
             } catch (Exception e) {
                 logger.error("WorkerNodeInfoAndGroupDbSyncTask error:", e);
             }
         }
     }
 
-    /**
-     * worker group node listener
-     */
-    class WorkerDataListener implements SubscribeListener {
+//    /**
+//     * worker group node listener
+//     */
+//    class WorkerDataListener implements SubscribeListener {
+//
+//        @Override
+//        public void notify(Event event) {
+//            final String path = event.path();
+//            final Type type = event.type();
+//            final String data = event.data();
+//            if (registryClient.isWorkerPath(path)) {
+//                try {
+//                    if (type == Type.ADD) {
+//                        logger.info("worker group node : {} added.", path);
+//                        String group = parseGroup(path);
+//                        Collection<String> currentNodes = registryClient.getWorkerGroupNodesDirectly(group);
+//                        logger.info("currentNodes : {}", currentNodes);
+//                        syncWorkerGroupNodes(group, currentNodes);
+//                    } else if (type == Type.REMOVE) {
+//                        logger.info("worker group node : {} down.", path);
+//                        String group = parseGroup(path);
+//                        Collection<String> currentNodes = registryClient.getWorkerGroupNodesDirectly(group);
+//                        syncWorkerGroupNodes(group, currentNodes);
+//                        alertDao.sendServerStopedAlert(1, path, "WORKER");
+//                    } else if (type == Type.UPDATE) {
+//                        logger.debug("worker group node : {} update, data: {}", path, data);
+//                        String group = parseGroup(path);
+//                        Collection<String> currentNodes = registryClient.getWorkerGroupNodesDirectly(group);
+//                        syncWorkerGroupNodes(group, currentNodes);
+//
+//                        String node = parseNode(path);
+//                        syncSingleWorkerNodeInfo(node, data);
+//                    }
+//                } catch (IllegalArgumentException ex) {
+//                    logger.warn(ex.getMessage());
+//                } catch (Exception ex) {
+//                    logger.error("WorkerGroupListener capture data change and get data failed", ex);
+//                }
+//
+//            }
+//        }
+//
+//        private String parseGroup(String path) {
+//            String[] parts = path.split("/");
+//            if (parts.length < WORKER_LISTENER_CHECK_LENGTH) {
+//                throw new IllegalArgumentException(String.format("worker group path : %s is not valid, ignore", path));
+//            }
+//            return parts[parts.length - 2];
+//        }
+//
+//        private String parseNode(String path) {
+//            String[] parts = path.split("/");
+//            if (parts.length < WORKER_LISTENER_CHECK_LENGTH) {
+//                throw new IllegalArgumentException(String.format("worker group path : %s is not valid, ignore", path));
+//            }
+//            return parts[parts.length - 1];
+//        }
+//    }
 
-        @Override
-        public void notify(Event event) {
-            final String path = event.path();
-            final Type type = event.type();
-            final String data = event.data();
-            if (registryClient.isWorkerPath(path)) {
-                try {
-                    if (type == Type.ADD) {
-                        logger.info("worker group node : {} added.", path);
-                        String group = parseGroup(path);
-                        Collection<String> currentNodes = registryClient.getWorkerGroupNodesDirectly(group);
-                        logger.info("currentNodes : {}", currentNodes);
-                        syncWorkerGroupNodes(group, currentNodes);
-                    } else if (type == Type.REMOVE) {
-                        logger.info("worker group node : {} down.", path);
-                        String group = parseGroup(path);
-                        Collection<String> currentNodes = registryClient.getWorkerGroupNodesDirectly(group);
-                        syncWorkerGroupNodes(group, currentNodes);
-                        alertDao.sendServerStopedAlert(1, path, "WORKER");
-                    } else if (type == Type.UPDATE) {
-                        logger.debug("worker group node : {} update, data: {}", path, data);
-                        String group = parseGroup(path);
-                        Collection<String> currentNodes = registryClient.getWorkerGroupNodesDirectly(group);
-                        syncWorkerGroupNodes(group, currentNodes);
+//    class MasterDataListener implements SubscribeListener {
+//        @Override
+//        public void notify(Event event) {
+//            final String path = event.path();
+//            final Type type = event.type();
+//            if (registryClient.isMasterPath(path)) {
+//                try {
+//                    if (type.equals(Type.ADD)) {
+//                        logger.info("master node : {} added.", path);
+//                        updateMasterNodes();
+//                    }
+//                    if (type.equals(Type.REMOVE)) {
+//                        logger.info("master node : {} down.", path);
+//                        updateMasterNodes();
+//                        alertDao.sendServerStopedAlert(1, path, "MASTER");
+//                    }
+//                } catch (Exception ex) {
+//                    logger.error("MasterNodeListener capture data change and get data failed.", ex);
+//                }
+//            }
+//        }
+//    }
 
-                        String node = parseNode(path);
-                        syncSingleWorkerNodeInfo(node, data);
-                    }
-                } catch (IllegalArgumentException ex) {
-                    logger.warn(ex.getMessage());
-                } catch (Exception ex) {
-                    logger.error("WorkerGroupListener capture data change and get data failed", ex);
-                }
-
-            }
-        }
-
-        private String parseGroup(String path) {
-            String[] parts = path.split("/");
-            if (parts.length < WORKER_LISTENER_CHECK_LENGTH) {
-                throw new IllegalArgumentException(String.format("worker group path : %s is not valid, ignore", path));
-            }
-            return parts[parts.length - 2];
-        }
-
-        private String parseNode(String path) {
-            String[] parts = path.split("/");
-            if (parts.length < WORKER_LISTENER_CHECK_LENGTH) {
-                throw new IllegalArgumentException(String.format("worker group path : %s is not valid, ignore", path));
-            }
-            return parts[parts.length - 1];
-        }
-    }
-
-    class MasterDataListener implements SubscribeListener {
-        @Override
-        public void notify(Event event) {
-            final String path = event.path();
-            final Type type = event.type();
-            if (registryClient.isMasterPath(path)) {
-                try {
-                    if (type.equals(Type.ADD)) {
-                        logger.info("master node : {} added.", path);
-                        updateMasterNodes();
-                    }
-                    if (type.equals(Type.REMOVE)) {
-                        logger.info("master node : {} down.", path);
-                        updateMasterNodes();
-                        alertDao.sendServerStopedAlert(1, path, "MASTER");
-                    }
-                } catch (Exception ex) {
-                    logger.error("MasterNodeListener capture data change and get data failed.", ex);
-                }
-            }
-        }
-    }
-
-    private void updateMasterNodes() {
-        SLOT_LIST.clear();
-        this.masterNodes.clear();
-        String nodeLock = Constants.REGISTRY_DOLPHINSCHEDULER_LOCK_MASTERS;
-        try {
-            registryClient.getLock(nodeLock);
-            Collection<String> currentNodes = registryClient.getMasterNodesDirectly();
-            List<Server> masterNodes = registryClient.getServerList(NodeType.MASTER);
-            syncMasterNodes(currentNodes, masterNodes);
-        } catch (Exception e) {
-            logger.error("update master nodes error", e);
-        } finally {
-            registryClient.releaseLock(nodeLock);
-        }
-
-    }
+//    private void updateMasterNodes() {
+//        SLOT_LIST.clear();
+//        this.masterNodes.clear();
+//        String nodeLock = Constants.REGISTRY_DOLPHINSCHEDULER_LOCK_MASTERS;
+//        try {
+//            registryClient.getLock(nodeLock);
+//            Collection<String> currentNodes = registryClient.getMasterNodesDirectly();
+//            List<Server> masterNodes = registryClient.getServerList(NodeType.MASTER);
+//            syncMasterNodes(currentNodes, masterNodes);
+//        } catch (Exception e) {
+//            logger.error("update master nodes error", e);
+//        } finally {
+//            registryClient.releaseLock(nodeLock);
+//        }
+//
+//    }
 
     /**
      * get master nodes

@@ -52,7 +52,7 @@
     <logger name="org.apache.hadoop" level="WARN"/>
 
 
-    <root level="INFO">
+    <root level="DEBUGGER">
         <appender-ref ref="STDOUT"/>
         <appender-ref ref="APILOGFILE"/>
     </root>

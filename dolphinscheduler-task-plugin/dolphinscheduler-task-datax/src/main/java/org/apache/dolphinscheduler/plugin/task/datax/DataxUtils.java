@@ -25,9 +25,13 @@ import com.alibaba.druid.sql.dialect.oracle.parser.OracleStatementParser;
 import com.alibaba.druid.sql.dialect.postgresql.parser.PGSQLStatementParser;
 import com.alibaba.druid.sql.dialect.sqlserver.parser.SQLServerStatementParser;
 import com.alibaba.druid.sql.parser.SQLStatementParser;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class DataxUtils {
+    private static final Logger log = LoggerFactory.getLogger(DataxUtils.class);
 
+    // ------------------- reader -------------------------
     public static final String DATAX_READER_PLUGIN_MYSQL = "mysqlreader";
 
     public static final String DATAX_READER_PLUGIN_POSTGRESQL = "postgresqlreader";
@@ -38,6 +42,10 @@ public class DataxUtils {
 
     public static final String DATAX_READER_PLUGIN_CLICKHOUSE = "clickhousereader";
 
+    public static final String DATAX_READER_PLUGIN_DEFAULT = "rdbmsreader";//通用读插件
+
+
+    // ------------------- writer -------------------------
     public static final String DATAX_WRITER_PLUGIN_MYSQL = "mysqlwriter";
 
     public static final String DATAX_WRITER_PLUGIN_POSTGRESQL = "postgresqlwriter";
@@ -47,6 +55,8 @@ public class DataxUtils {
     public static final String DATAX_WRITER_PLUGIN_SQLSERVER = "sqlserverwriter";
 
     public static final String DATAX_WRITER_PLUGIN_CLICKHOUSE = "clickhousewriter";
+
+    public static final String DATAX_WRITER_PLUGIN_DEFAULT = "rdbmswriter"; // 通用写插件
 
     public static String getReaderPluginName(DbType dbType) {
         switch (dbType) {
@@ -61,7 +71,8 @@ public class DataxUtils {
             case CLICKHOUSE:
                 return DATAX_READER_PLUGIN_CLICKHOUSE;
             default:
-                return null;
+                log.error("未能找到对应读取插件:{}",dbType);
+                return DATAX_READER_PLUGIN_DEFAULT;
         }
     }
 
@@ -78,7 +89,9 @@ public class DataxUtils {
             case CLICKHOUSE:
                 return DATAX_WRITER_PLUGIN_CLICKHOUSE;
             default:
-                return null;
+//                return null;
+                log.error("未能找到对应读取插件:{}",dbType);
+                return DATAX_WRITER_PLUGIN_DEFAULT;
         }
     }
 

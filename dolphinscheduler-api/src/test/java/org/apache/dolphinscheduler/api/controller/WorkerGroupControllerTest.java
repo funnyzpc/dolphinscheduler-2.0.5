@@ -59,29 +59,29 @@ public class WorkerGroupControllerTest extends AbstractControllerTest {
     @MockBean
     private ProcessInstanceMapper processInstanceMapper;
 
-    @MockBean
-    private RegistryClient registryClient;
-
-    @Test
-    public void testSaveWorkerGroup() throws Exception {
-        Map<String, String> serverMaps = new HashMap<>();
-        serverMaps.put("192.168.0.1", "192.168.0.1");
-        serverMaps.put("192.168.0.2", "192.168.0.2");
-        PowerMockito.when(registryClient.getServerMaps(NodeType.WORKER, true)).thenReturn(serverMaps);
-
-        MultiValueMap<String, String> paramsMap = new LinkedMultiValueMap<>();
-        paramsMap.add("name","cxc_work_group");
-        paramsMap.add("addrList","192.168.0.1,192.168.0.2");
-        MvcResult mvcResult = mockMvc.perform(post("/worker-group/save")
-                .header("sessionId", sessionId)
-                .params(paramsMap))
-                .andExpect(status().isOk())
-                .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8))
-                .andReturn();
-        Result result = JSONUtils.parseObject(mvcResult.getResponse().getContentAsString(), Result.class);
-        Assert.assertTrue(result != null && result.isSuccess());
-        logger.info(mvcResult.getResponse().getContentAsString());
-    }
+//    @MockBean
+//    private RegistryClient registryClient;
+//
+//    @Test
+//    public void testSaveWorkerGroup() throws Exception {
+//        Map<String, String> serverMaps = new HashMap<>();
+//        serverMaps.put("192.168.0.1", "192.168.0.1");
+//        serverMaps.put("192.168.0.2", "192.168.0.2");
+//        PowerMockito.when(registryClient.getServerMaps(NodeType.WORKER, true)).thenReturn(serverMaps);
+//
+//        MultiValueMap<String, String> paramsMap = new LinkedMultiValueMap<>();
+//        paramsMap.add("name","cxc_work_group");
+//        paramsMap.add("addrList","192.168.0.1,192.168.0.2");
+//        MvcResult mvcResult = mockMvc.perform(post("/worker-group/save")
+//                .header("sessionId", sessionId)
+//                .params(paramsMap))
+//                .andExpect(status().isOk())
+//                .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8))
+//                .andReturn();
+//        Result result = JSONUtils.parseObject(mvcResult.getResponse().getContentAsString(), Result.class);
+//        Assert.assertTrue(result != null && result.isSuccess());
+//        logger.info(mvcResult.getResponse().getContentAsString());
+//    }
 
     @Test
     public void testQueryAllWorkerGroupsPaging() throws Exception {

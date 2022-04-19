@@ -77,8 +77,8 @@ public class WorkerRegistryClient {
      */
     private ScheduledExecutorService heartBeatExecutor;
 
-    @Autowired
-    private RegistryClient registryClient;
+//    @Autowired
+//    private RegistryClient registryClient;
 
     /**
      * worker startup time, ms
@@ -108,29 +108,29 @@ public class WorkerRegistryClient {
                 workerConfig.getHostWeight(),
                 workerZkPaths,
                 Constants.WORKER_TYPE,
-                registryClient,
+//                registryClient,
                 workerConfig.getWorkerExecThreads(),
                 workerManagerThread
         );
 
-        for (String workerZKPath : workerZkPaths) {
-            // remove before persist
-            registryClient.remove(workerZKPath);
-            registryClient.persistEphemeral(workerZKPath, heartBeatTask.getHeartBeatInfo());
-            logger.info("worker node : {} registry to ZK {} successfully", address, workerZKPath);
-        }
+//        for (String workerZKPath : workerZkPaths) {
+//            // remove before persist
+////            registryClient.remove(workerZKPath);
+////            registryClient.persistEphemeral(workerZKPath, heartBeatTask.getHeartBeatInfo());
+//            logger.info("worker node : {} registry to ZK {} successfully", address, workerZKPath);
+//        }
 
-        while (!this.checkNodeExists()) {
-            ThreadUtils.sleep(SLEEP_TIME_MILLIS);
-        }
+//        while (!this.checkNodeExists()) {
+//            ThreadUtils.sleep(SLEEP_TIME_MILLIS);
+//        }
 
         // sleep 1s, waiting master failover remove
         ThreadUtils.sleep(Constants.SLEEP_TIME_MILLIS);
 
-        // delete dead server
-        this.handleDeadServer(workerZkPaths, NodeType.WORKER, Constants.DELETE_OP);
+//        // delete dead server
+//        this.handleDeadServer(workerZkPaths, NodeType.WORKER, Constants.DELETE_OP);
 
-        registryClient.addConnectionStateListener(this::handleConnectionState);
+//        registryClient.addConnectionStateListener(this::handleConnectionState);
 
         this.heartBeatExecutor.scheduleAtFixedRate(heartBeatTask, workerHeartbeatInterval, workerHeartbeatInterval, TimeUnit.SECONDS);
         logger.info("worker node : {} heartbeat interval {} s", address, workerHeartbeatInterval);
@@ -148,14 +148,14 @@ public class WorkerRegistryClient {
                 logger.debug("registry connection state is {}, clean the node info", state);
                 String address = NetUtils.getAddr(workerConfig.getListenPort());
                 Set<String> workerZkPaths = getWorkerZkPaths();
-                for (String workerZKPath : workerZkPaths) {
-                    registryClient.persistEphemeral(workerZKPath, "");
-                    logger.info("worker node : {} reconnect to ZK {} successfully", address, workerZKPath);
-                }
+//                for (String workerZKPath : workerZkPaths) {
+//                    registryClient.persistEphemeral(workerZKPath, "");
+//                    logger.info("worker node : {} reconnect to ZK {} successfully", address, workerZKPath);
+//                }
                 break;
             case DISCONNECTED:
                 logger.warn("registry connection state is {}, ready to stop myself", state);
-                registryClient.getStoppable().stop("registry connection state is DISCONNECTED, stop myself");
+//                registryClient.getStoppable().stop("registry connection state is DISCONNECTED, stop myself");
                 break;
             default:
         }
@@ -168,10 +168,10 @@ public class WorkerRegistryClient {
         try {
             String address = getLocalAddress();
             Set<String> workerZkPaths = getWorkerZkPaths();
-            for (String workerZkPath : workerZkPaths) {
-                registryClient.remove(workerZkPath);
-                logger.info("worker node : {} unRegistry from ZK {}.", address, workerZkPath);
-            }
+//            for (String workerZkPath : workerZkPaths) {
+//                registryClient.remove(workerZkPath);
+//                logger.info("worker node : {} unRegistry from ZK {}.", address, workerZkPath);
+//            }
         } catch (Exception ex) {
             logger.error("remove worker zk path exception", ex);
         }
@@ -179,7 +179,7 @@ public class WorkerRegistryClient {
         this.heartBeatExecutor.shutdownNow();
         logger.info("heartbeat executor shutdown");
 
-        registryClient.close();
+//        registryClient.close();
         logger.info("registry client closed");
     }
 
@@ -204,9 +204,9 @@ public class WorkerRegistryClient {
         return workerPaths;
     }
 
-    public void handleDeadServer(Set<String> nodeSet, NodeType nodeType, String opType) {
-        registryClient.handleDeadServer(nodeSet, nodeType, opType);
-    }
+//    public void handleDeadServer(Set<String> nodeSet, NodeType nodeType, String opType) {
+//        registryClient.handleDeadServer(nodeSet, nodeType, opType);
+//    }
 
     /**
      * get local address
@@ -215,15 +215,15 @@ public class WorkerRegistryClient {
         return NetUtils.getAddr(workerConfig.getListenPort());
     }
 
-    public void setRegistryStoppable(IStoppable stoppable) {
-        registryClient.setStoppable(stoppable);
-    }
+//    public void setRegistryStoppable(IStoppable stoppable) {
+//        registryClient.setStoppable(stoppable);
+//    }
 
-    public boolean checkNodeExists() {
-        boolean result = registryClient.checkNodeExists(NetUtils.getHost(), NodeType.WORKER);
-        if (result) {
-            logger.info("check worker, node exist success, host:{}", NetUtils.getHost());
-        }
-        return result;
-    }
+//    public boolean checkNodeExists() {
+//        boolean result = registryClient.checkNodeExists(NetUtils.getHost(), NodeType.WORKER);
+//        if (result) {
+//            logger.info("check worker, node exist success, host:{}", NetUtils.getHost());
+//        }
+//        return result;
+//    }
 }

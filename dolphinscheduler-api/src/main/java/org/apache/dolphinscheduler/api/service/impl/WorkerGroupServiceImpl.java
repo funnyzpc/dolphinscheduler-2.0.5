@@ -65,8 +65,8 @@ public class WorkerGroupServiceImpl extends BaseServiceImpl implements WorkerGro
     @Autowired
     private ProcessInstanceMapper processInstanceMapper;
 
-    @Autowired
-    private RegistryClient registryClient;
+//    @Autowired
+//    private RegistryClient registryClient;
 
     /**
      * create or update a worker group
@@ -108,11 +108,11 @@ public class WorkerGroupServiceImpl extends BaseServiceImpl implements WorkerGro
             putMsg(result, Status.NAME_EXIST, workerGroup.getName());
             return result;
         }
-        String invalidAddr = checkWorkerGroupAddrList(workerGroup);
-        if (invalidAddr != null) {
-            putMsg(result, Status.WORKER_ADDRESS_INVALID, invalidAddr);
-            return result;
-        }
+//        String invalidAddr = checkWorkerGroupAddrList(workerGroup);
+//        if (invalidAddr != null) {
+//            putMsg(result, Status.WORKER_ADDRESS_INVALID, invalidAddr);
+//            return result;
+//        }
         if (workerGroup.getId() != 0) {
             workerGroupMapper.updateById(workerGroup);
         } else {
@@ -142,29 +142,30 @@ public class WorkerGroupServiceImpl extends BaseServiceImpl implements WorkerGro
                 }
             }
         }
-        // check zookeeper
-        String workerGroupPath = Constants.REGISTRY_DOLPHINSCHEDULER_WORKERS + Constants.SINGLE_SLASH + workerGroup.getName();
-        return registryClient.exists(workerGroupPath);
+//        // check zookeeper
+//        String workerGroupPath = Constants.REGISTRY_DOLPHINSCHEDULER_WORKERS + Constants.SINGLE_SLASH + workerGroup.getName();
+//        return registryClient.exists(workerGroupPath);
+        return false;
     }
 
-    /**
-     * check worker group addr list
-     *
-     * @param workerGroup worker group
-     * @return boolean
-     */
-    private String checkWorkerGroupAddrList(WorkerGroup workerGroup) {
-        Map<String, String> serverMaps = registryClient.getServerMaps(NodeType.WORKER, true);
-        if (Strings.isNullOrEmpty(workerGroup.getAddrList())) {
-            return null;
-        }
-        for (String addr : workerGroup.getAddrList().split(Constants.COMMA)) {
-            if (!serverMaps.containsKey(addr)) {
-                return addr;
-            }
-        }
-        return null;
-    }
+//    /**
+//     * check worker group addr list
+//     *
+//     * @param workerGroup worker group
+//     * @return boolean
+//     */
+//    private String checkWorkerGroupAddrList(WorkerGroup workerGroup) {
+//        Map<String, String> serverMaps = registryClient.getServerMaps(NodeType.WORKER, true);
+//        if (Strings.isNullOrEmpty(workerGroup.getAddrList())) {
+//            return null;
+//        }
+//        for (String addr : workerGroup.getAddrList().split(Constants.COMMA)) {
+//            if (!serverMaps.containsKey(addr)) {
+//                return addr;
+//            }
+//        }
+//        return null;
+//    }
 
     /**
      * query worker group paging
@@ -255,45 +256,45 @@ public class WorkerGroupServiceImpl extends BaseServiceImpl implements WorkerGro
         List<WorkerGroup> workerGroups = workerGroupMapper.queryAllWorkerGroup();
         // worker groups from zookeeper
         String workerPath = Constants.REGISTRY_DOLPHINSCHEDULER_WORKERS;
-        Collection<String> workerGroupList = null;
-        try {
-            workerGroupList = registryClient.getChildrenKeys(workerPath);
-        } catch (Exception e) {
-            logger.error("getWorkerGroups exception, workerPath: {}, isPaging: {}", workerPath, isPaging, e);
-        }
+//        Collection<String> workerGroupList = null;
+//        try {
+//            workerGroupList = registryClient.getChildrenKeys(workerPath);
+//        } catch (Exception e) {
+//            logger.error("getWorkerGroups exception, workerPath: {}, isPaging: {}", workerPath, isPaging, e);
+//        }
+//
+//        if (CollectionUtils.isEmpty(workerGroupList)) {
+//            if (CollectionUtils.isEmpty(workerGroups) && !isPaging) {
+//                WorkerGroup wg = new WorkerGroup();
+//                wg.setName(Constants.DEFAULT_WORKER_GROUP);
+//                workerGroups.add(wg);
+//            }
+//            return workerGroups;
+//        }
 
-        if (CollectionUtils.isEmpty(workerGroupList)) {
-            if (CollectionUtils.isEmpty(workerGroups) && !isPaging) {
-                WorkerGroup wg = new WorkerGroup();
-                wg.setName(Constants.DEFAULT_WORKER_GROUP);
-                workerGroups.add(wg);
-            }
-            return workerGroups;
-        }
-
-        for (String workerGroup : workerGroupList) {
-            String workerGroupPath = workerPath + Constants.SINGLE_SLASH + workerGroup;
-            Collection<String> childrenNodes = null;
-            try {
-                childrenNodes = registryClient.getChildrenKeys(workerGroupPath);
-            } catch (Exception e) {
-                logger.error("getChildrenNodes exception: {}, workerGroupPath: {}", e.getMessage(), workerGroupPath);
-            }
-            if (childrenNodes == null || childrenNodes.isEmpty()) {
-                continue;
-            }
-            WorkerGroup wg = new WorkerGroup();
-            wg.setName(workerGroup);
-            if (isPaging) {
-                wg.setAddrList(String.join(Constants.COMMA, childrenNodes));
-                String registeredValue = registryClient.get(workerGroupPath + Constants.SINGLE_SLASH + childrenNodes.iterator().next());
-                String[] rv = registeredValue.split(Constants.COMMA);
-                wg.setCreateTime(new Date(Long.parseLong(rv[6])));
-                wg.setUpdateTime(new Date(Long.parseLong(rv[7])));
-                wg.setSystemDefault(true);
-            }
-            workerGroups.add(wg);
-        }
+//        for (String workerGroup2 : workerGroupList) {
+//            String workerGroupPath = workerPath + Constants.SINGLE_SLASH + workerGroup;
+//            Collection<String> childrenNodes = null;
+//            try {
+//                childrenNodes = registryClient.getChildrenKeys(workerGroupPath);
+//            } catch (Exception e) {
+//                logger.error("getChildrenNodes exception: {}, workerGroupPath: {}", e.getMessage(), workerGroupPath);
+//            }
+//            if (childrenNodes == null || childrenNodes.isEmpty()) {
+//                continue;
+//            }
+//            WorkerGroup wg = new WorkerGroup();
+//            wg.setName(workerGroup);
+//            if (isPaging) {
+//                wg.setAddrList(String.join(Constants.COMMA, childrenNodes));
+////                String registeredValue = registryClient.get(workerGroupPath + Constants.SINGLE_SLASH + childrenNodes.iterator().next());
+////                String[] rv = registeredValue.split(Constants.COMMA);
+////                wg.setCreateTime(new Date(Long.parseLong(rv[6])));
+////                wg.setUpdateTime(new Date(Long.parseLong(rv[7])));
+//                wg.setSystemDefault(true);
+//            }
+//            workerGroups.add(wg);
+//        }
         return workerGroups;
     }
 
@@ -334,8 +335,8 @@ public class WorkerGroupServiceImpl extends BaseServiceImpl implements WorkerGro
     @Override
     public Map<String, Object> getWorkerAddressList() {
         Map<String, Object> result = new HashMap<>();
-        Set<String> serverNodeList = registryClient.getServerNodeSet(NodeType.WORKER, true);
-        result.put(Constants.DATA_LIST, serverNodeList);
+//        Set<String> serverNodeList = registryClient.getServerNodeSet(NodeType.WORKER, true);
+//        result.put(Constants.DATA_LIST, serverNodeList);
         putMsg(result, Status.SUCCESS);
         return result;
     }

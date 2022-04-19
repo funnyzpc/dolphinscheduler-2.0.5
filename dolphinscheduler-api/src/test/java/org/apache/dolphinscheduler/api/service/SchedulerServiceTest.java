@@ -149,8 +149,8 @@ public class SchedulerServiceTest {
         result = schedulerService.setScheduleState(loginUser, project.getCode(), 1, ReleaseState.ONLINE);
         Assert.assertEquals(Status.MASTER_NOT_EXISTS, result.get(Constants.STATUS));
 
-        //set master
-        Mockito.when(monitorService.getServerListFromRegistry(true)).thenReturn(masterServers);
+//        //set master
+//        Mockito.when(monitorService.getServerListFromRegistry(true)).thenReturn(masterServers);
 
         //SUCCESS
         result = schedulerService.setScheduleState(loginUser, project.getCode(), 1, ReleaseState.ONLINE);

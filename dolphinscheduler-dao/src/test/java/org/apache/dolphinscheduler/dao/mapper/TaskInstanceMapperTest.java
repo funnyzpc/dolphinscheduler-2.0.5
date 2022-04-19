@@ -386,9 +386,9 @@ public class TaskInstanceMapperTest {
                 "",
                 "",
                 0,
-                new int[0],
-                "",
-                null, null
+                new Integer[0],
+                ""
+//                null, null
         );
         processInstanceMapper.deleteById(processInstance.getId());
         taskInstanceMapper.deleteById(task.getId());

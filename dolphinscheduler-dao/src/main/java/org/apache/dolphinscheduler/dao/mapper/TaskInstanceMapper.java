@@ -67,11 +67,11 @@ public interface TaskInstanceMapper extends BaseMapper<TaskInstance> {
                                                     @Param("processInstanceName") String processInstanceName,
                                                     @Param("searchVal") String searchVal,
                                                     @Param("taskName") String taskName,
-                                                    @Param("executorId") int executorId,
-                                                    @Param("states") int[] statusArray,
-                                                    @Param("host") String host,
-                                                    @Param("startTime") Date startTime,
-                                                    @Param("endTime") Date endTime
+                                                    @Param("executorId") Integer executorId,
+                                                    @Param("states") Integer[] statusArray,
+                                                    @Param("host") String host
+//                                                    @Param("startTime") Date startTime,
+//                                                    @Param("endTime") Date endTime
     );
 
     int updateHostAndSubmitTimeById(@Param("id") int id, @Param("host") String host, @Param("submitTime") Date submitTime);

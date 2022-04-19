@@ -66,16 +66,16 @@ public abstract class AbstractMonitor implements Monitor {
             nodes = runConfig.getWorkers();
         }
 
-        Map<String, String> activeNodeMap = getActiveNodesByPath(path);
+//        Map<String, String> activeNodeMap = getActiveNodesByPath(path);
+//
+//        Set<String> needRestartServer = getNeedRestartServer(getRunConfigServer(nodes),
+//                activeNodeMap.keySet());
 
-        Set<String> needRestartServer = getNeedRestartServer(getRunConfigServer(nodes),
-                activeNodeMap.keySet());
-
-        for (String node : needRestartServer){
-            // os.system('ssh -p ' + ssh_port + ' ' + self.get_ip_by_hostname(master) + ' sh ' + install_path + '/bin/dolphinscheduler-daemon.sh start master-server')
-            String runCmd = "ssh -p " + port + " " +  node + " sh "  + installPath + "/bin/dolphinscheduler-daemon.sh start " + serverName;
-            Runtime.getRuntime().exec(runCmd);
-        }
+//        for (String node : needRestartServer){
+//            // os.system('ssh -p ' + ssh_port + ' ' + self.get_ip_by_hostname(master) + ' sh ' + install_path + '/bin/dolphinscheduler-daemon.sh start master-server')
+//            String runCmd = "ssh -p " + port + " " +  node + " sh "  + installPath + "/bin/dolphinscheduler-daemon.sh start " + serverName;
+//            Runtime.getRuntime().exec(runCmd);
+//        }
     }
 
     /**
@@ -123,5 +123,5 @@ public abstract class AbstractMonitor implements Monitor {
      * @param path path
      * @return active nodes
      */
-    protected abstract Map<String,String> getActiveNodesByPath(String path);
+//    protected abstract Map<String,String> getActiveNodesByPath(String path);
 }

@@ -58,6 +58,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import com.google.common.base.Strings;
 
+@Deprecated
 public final class ZookeeperRegistry implements Registry {
 
     private CuratorFramework client;

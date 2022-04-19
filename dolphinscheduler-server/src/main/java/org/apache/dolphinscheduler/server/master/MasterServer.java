@@ -32,7 +32,6 @@ import org.apache.dolphinscheduler.server.master.processor.StateEventProcessor;
 import org.apache.dolphinscheduler.server.master.processor.TaskAckProcessor;
 import org.apache.dolphinscheduler.server.master.processor.TaskKillResponseProcessor;
 import org.apache.dolphinscheduler.server.master.processor.TaskResponseProcessor;
-import org.apache.dolphinscheduler.server.master.registry.MasterRegistryClient;
 import org.apache.dolphinscheduler.server.master.runner.EventExecuteService;
 import org.apache.dolphinscheduler.server.master.runner.FailoverExecuteThread;
 import org.apache.dolphinscheduler.server.master.runner.MasterSchedulerService;
@@ -42,7 +41,6 @@ import org.apache.dolphinscheduler.service.quartz.QuartzExecutors;
 
 import java.util.concurrent.ConcurrentHashMap;
 
-import org.quartz.SchedulerException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -93,11 +91,11 @@ public class MasterServer implements IStoppable {
      */
     private NettyRemotingServer nettyRemotingServer;
 
-    /**
-     * zk master client
-     */
-    @Autowired
-    private MasterRegistryClient masterRegistryClient;
+//    /**
+//     * zk master client
+//     */
+//    @Autowired
+//    private MasterRegistryClient masterRegistryClient;
 
     /**
      * scheduler service
@@ -152,10 +150,10 @@ public class MasterServer implements IStoppable {
         this.nettyRemotingServer.registerProcessor(CommandType.CACHE_EXPIRE, new CacheProcessor());
         this.nettyRemotingServer.start();
 
-        // self tolerant
-        this.masterRegistryClient.init(this.processInstanceExecMaps);
-        this.masterRegistryClient.setRegistryStoppable(this);
-        this.masterRegistryClient.start();
+//        // self tolerant
+//        this.masterRegistryClient.init(this.processInstanceExecMaps);
+//        this.masterRegistryClient.setRegistryStoppable(this);
+//        this.masterRegistryClient.start();
 
         this.eventExecuteService.init(this.processInstanceExecMaps);
         this.eventExecuteService.start();
@@ -174,7 +172,7 @@ public class MasterServer implements IStoppable {
         } catch (Exception e) {
             try {
                 QuartzExecutors.getInstance().shutdown();
-            } catch (SchedulerException e1) {
+            } catch (Exception e1) {
                 logger.error("QuartzExecutors shutdown failed : " + e1.getMessage(), e1);
             }
             logger.error("start Quartz failed", e);
@@ -218,7 +216,7 @@ public class MasterServer implements IStoppable {
             // close
             this.masterSchedulerService.close();
             this.nettyRemotingServer.close();
-            this.masterRegistryClient.closeRegistry();
+//            this.masterRegistryClient.closeRegistry();
             // close quartz
             try {
                 QuartzExecutors.getInstance().shutdown();

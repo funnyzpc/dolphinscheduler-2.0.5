@@ -38,10 +38,11 @@ public class RefreshResourceTaskTest {
     @InjectMocks
     LowerWeightHostManager lowerWeightHostManager;
 
-    @Test
-    public void testGetHostWeightWithResult() {
-        Assert.assertTrue(!lowerWeightHostManager.new RefreshResourceTask()
-            .getHostWeight("192.168.1.1:22", "default", null)
-            .isPresent());
-    }
+//    @Test
+//    public void testGetHostWeightWithResult() {
+//        Assert.assertTrue(!lowerWeightHostManager.new RefreshResourceTask()
+//            .getHostWeight("192.168.1.1:22", "default", null)
+//            .isPresent());
+//    }
+
 }

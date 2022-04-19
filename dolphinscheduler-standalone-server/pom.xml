@@ -34,11 +34,11 @@
             <groupId>org.apache.dolphinscheduler</groupId>
             <artifactId>dolphinscheduler-api</artifactId>
         </dependency>
-        <dependency>
+<!--        <dependency>
             <groupId>org.apache.dolphinscheduler</groupId>
             <artifactId>dolphinscheduler-python</artifactId>
-        </dependency>
-        <dependency>
+        </dependency>-->
+<!--        <dependency>
             <groupId>org.apache.curator</groupId>
             <artifactId>curator-test</artifactId>
             <version>${curator.test}</version>
@@ -48,11 +48,11 @@
                     <artifactId>javassist</artifactId>
                 </exclusion>
             </exclusions>
-        </dependency>
-        <dependency>
+        </dependency>-->
+<!--        <dependency>
             <groupId>org.apache.dolphinscheduler</groupId>
             <artifactId>dolphinscheduler-alert-server</artifactId>
-        </dependency>
+        </dependency>-->
     </dependencies>
 
 </project>

@@ -82,8 +82,8 @@ public class MasterRegistryClient {
     @Autowired
     private ProcessService processService;
 
-    @Autowired
-    private RegistryClient registryClient;
+//    @Autowired
+//    private RegistryClient registryClient;
 
     /**
      * master config
@@ -111,110 +111,110 @@ public class MasterRegistryClient {
         this.processInstanceExecMaps = processInstanceExecMaps;
     }
 
-    public void start() {
-        String nodeLock = Constants.REGISTRY_DOLPHINSCHEDULER_LOCK_FAILOVER_STARTUP_MASTERS;
-        try {
-            // create distributed lock with the root node path of the lock space as /dolphinscheduler/lock/failover/startup-masters
+//    public void start() {
+//        String nodeLock = Constants.REGISTRY_DOLPHINSCHEDULER_LOCK_FAILOVER_STARTUP_MASTERS;
+//        try {
+//            // create distributed lock with the root node path of the lock space as /dolphinscheduler/lock/failover/startup-masters
+//
+//            registryClient.getLock(nodeLock);
+//            // master registry
+//            registry();
+//
+//            registryClient.subscribe(REGISTRY_DOLPHINSCHEDULER_NODE, new MasterRegistryDataListener());
+//        } catch (Exception e) {
+//            logger.error("master start up exception", e);
+//            this.registryClient.getStoppable().stop("master start up exception");
+//        } finally {
+//            try {
+//                registryClient.releaseLock(nodeLock);
+//            } catch (Exception e) {
+//                logger.error("release lock error", e);
+//            }
+//        }
+//    }
 
-            registryClient.getLock(nodeLock);
-            // master registry
-            registry();
-
-            registryClient.subscribe(REGISTRY_DOLPHINSCHEDULER_NODE, new MasterRegistryDataListener());
-        } catch (Exception e) {
-            logger.error("master start up exception", e);
-            this.registryClient.getStoppable().stop("master start up exception");
-        } finally {
-            try {
-                registryClient.releaseLock(nodeLock);
-            } catch (Exception e) {
-                logger.error("release lock error", e);
-            }
-        }
-    }
-
-    public void setRegistryStoppable(IStoppable stoppable) {
-        registryClient.setStoppable(stoppable);
-    }
+//    public void setRegistryStoppable(IStoppable stoppable) {
+//        registryClient.setStoppable(stoppable);
+//    }
 
     public void closeRegistry() {
         // TODO unsubscribe MasterRegistryDataListener
         deregister();
     }
 
-    /**
-     * remove master node path
-     *
-     * @param path node path
-     * @param nodeType node type
-     * @param failover is failover
-     */
-    public void removeMasterNodePath(String path, NodeType nodeType, boolean failover) {
-        logger.info("{} node deleted : {}", nodeType, path);
+//    /**
+//     * remove master node path
+//     *
+//     * @param path node path
+//     * @param nodeType node type
+//     * @param failover is failover
+//     */
+//    public void removeMasterNodePath(String path, NodeType nodeType, boolean failover) {
+//        logger.info("{} node deleted : {}", nodeType, path);
+//
+//        if (StringUtils.isEmpty(path)) {
+//            logger.error("server down error: empty path: {}, nodeType:{}", path, nodeType);
+//            return;
+//        }
+//
+//        String serverHost = registryClient.getHostByEventDataPath(path);
+//        if (StringUtils.isEmpty(serverHost)) {
+//            logger.error("server down error: unknown path: {}, nodeType:{}", path, nodeType);
+//            return;
+//        }
+//
+//        String failoverPath = getFailoverLockPath(nodeType, serverHost);
+//        try {
+//            registryClient.getLock(failoverPath);
+//
+//            if (!registryClient.exists(path)) {
+//                logger.info("path: {} not exists", path);
+//                // handle dead server
+//                registryClient.handleDeadServer(Collections.singleton(path), nodeType, Constants.ADD_OP);
+//            }
+//
+//            //failover server
+//            if (failover) {
+//                failoverServerWhenDown(serverHost, nodeType);
+//            }
+//        } catch (Exception e) {
+//            logger.error("{} server failover failed, host:{}", nodeType, serverHost, e);
+//        } finally {
+//            registryClient.releaseLock(failoverPath);
+//        }
+//    }
 
-        if (StringUtils.isEmpty(path)) {
-            logger.error("server down error: empty path: {}, nodeType:{}", path, nodeType);
-            return;
-        }
-
-        String serverHost = registryClient.getHostByEventDataPath(path);
-        if (StringUtils.isEmpty(serverHost)) {
-            logger.error("server down error: unknown path: {}, nodeType:{}", path, nodeType);
-            return;
-        }
-
-        String failoverPath = getFailoverLockPath(nodeType, serverHost);
-        try {
-            registryClient.getLock(failoverPath);
-
-            if (!registryClient.exists(path)) {
-                logger.info("path: {} not exists", path);
-                // handle dead server
-                registryClient.handleDeadServer(Collections.singleton(path), nodeType, Constants.ADD_OP);
-            }
-
-            //failover server
-            if (failover) {
-                failoverServerWhenDown(serverHost, nodeType);
-            }
-        } catch (Exception e) {
-            logger.error("{} server failover failed, host:{}", nodeType, serverHost, e);
-        } finally {
-            registryClient.releaseLock(failoverPath);
-        }
-    }
-
-    /**
-     * remove worker node path
-     *
-     * @param path     node path
-     * @param nodeType node type
-     * @param failover is failover
-     */
-    public void removeWorkerNodePath(String path, NodeType nodeType, boolean failover) {
-        logger.info("{} node deleted : {}", nodeType, path);
-        try {
-            String serverHost = null;
-            if (!StringUtils.isEmpty(path)) {
-                serverHost = registryClient.getHostByEventDataPath(path);
-                if (StringUtils.isEmpty(serverHost)) {
-                    logger.error("server down error: unknown path: {}", path);
-                    return;
-                }
-                if (!registryClient.exists(path)) {
-                    logger.info("path: {} not exists", path);
-                    // handle dead server
-                    registryClient.handleDeadServer(Collections.singleton(path), nodeType, Constants.ADD_OP);
-                }
-            }
-            //failover server
-            if (failover) {
-                failoverServerWhenDown(serverHost, nodeType);
-            }
-        } catch (Exception e) {
-            logger.error("{} server failover failed", nodeType, e);
-        }
-    }
+//    /**
+//     * remove worker node path
+//     *
+//     * @param path     node path
+//     * @param nodeType node type
+//     * @param failover is failover
+//     */
+//    public void removeWorkerNodePath(String path, NodeType nodeType, boolean failover) {
+//        logger.info("{} node deleted : {}", nodeType, path);
+//        try {
+//            String serverHost = null;
+//            if (!StringUtils.isEmpty(path)) {
+//                serverHost = registryClient.getHostByEventDataPath(path);
+//                if (StringUtils.isEmpty(serverHost)) {
+//                    logger.error("server down error: unknown path: {}", path);
+//                    return;
+//                }
+//                if (!registryClient.exists(path)) {
+//                    logger.info("path: {} not exists", path);
+//                    // handle dead server
+//                    registryClient.handleDeadServer(Collections.singleton(path), nodeType, Constants.ADD_OP);
+//                }
+//            }
+//            //failover server
+//            if (failover) {
+//                failoverServerWhenDown(serverHost, nodeType);
+//            }
+//        } catch (Exception e) {
+//            logger.error("{} server failover failed", nodeType, e);
+//        }
+//    }
 
     /**
      * failover server when server down
@@ -282,29 +282,29 @@ public class MasterRegistryClient {
         return taskNeedFailover;
     }
 
-    /**
-     * check task start after the worker server starts.
-     *
-     * @param taskInstance task instance
-     * @return true if task instance start time after worker server start date
-     */
-    private boolean checkTaskAfterWorkerStart(TaskInstance taskInstance) {
-        if (StringUtils.isEmpty(taskInstance.getHost())) {
-            return false;
-        }
-        Date workerServerStartDate = null;
-        List<Server> workerServers = registryClient.getServerList(NodeType.WORKER);
-        for (Server workerServer : workerServers) {
-            if (taskInstance.getHost().equals(workerServer.getHost() + Constants.COLON + workerServer.getPort())) {
-                workerServerStartDate = workerServer.getCreateTime();
-                break;
-            }
-        }
-        if (workerServerStartDate != null) {
-            return taskInstance.getStartTime().after(workerServerStartDate);
-        }
-        return false;
-    }
+//    /**
+//     * check task start after the worker server starts.
+//     *
+//     * @param taskInstance task instance
+//     * @return true if task instance start time after worker server start date
+//     */
+//    private boolean checkTaskAfterWorkerStart(TaskInstance taskInstance) {
+//        if (StringUtils.isEmpty(taskInstance.getHost())) {
+//            return false;
+//        }
+//        Date workerServerStartDate = null;
+//        List<Server> workerServers = registryClient.getServerList(NodeType.WORKER);
+//        for (Server workerServer : workerServers) {
+//            if (taskInstance.getHost().equals(workerServer.getHost() + Constants.COLON + workerServer.getPort())) {
+//                workerServerStartDate = workerServer.getCreateTime();
+//                break;
+//            }
+//        }
+//        if (workerServerStartDate != null) {
+//            return taskInstance.getStartTime().after(workerServerStartDate);
+//        }
+//        return false;
+//    }
 
     /**
      * check task start after the worker server starts.
@@ -343,16 +343,16 @@ public class MasterRegistryClient {
         return serverStartupTime;
     }
 
-    /**
-     * get server startup time
-     */
-    private Date getServerStartupTime(NodeType nodeType, String host) {
-        if (StringUtils.isEmpty(host)) {
-            return null;
-        }
-        List<Server> servers = registryClient.getServerList(nodeType);
-        return getServerStartupTime(servers, host);
-    }
+//    /**
+//     * get server startup time
+//     */
+//    private Date getServerStartupTime(NodeType nodeType, String host) {
+//        if (StringUtils.isEmpty(host)) {
+//            return null;
+//        }
+//        List<Server> servers = registryClient.getServerList(nodeType);
+//        return getServerStartupTime(servers, host);
+//    }
 
     /**
      * failover worker tasks
@@ -369,7 +369,7 @@ public class MasterRegistryClient {
             return;
         }
 
-        List<Server> workerServers = registryClient.getServerList(NodeType.WORKER);
+//        List<Server> workerServers = registryClient.getServerList(NodeType.WORKER);
 
         long startTime = System.currentTimeMillis();
         List<TaskInstance> needFailoverTaskInstanceList = processService.queryNeedFailoverTaskInstances(workerHost);
@@ -388,9 +388,9 @@ public class MasterRegistryClient {
                 processInstanceCacheMap.put(processInstance.getId(), processInstance);
             }
 
-            if (!checkTaskInstanceNeedFailover(workerServers, taskInstance)) {
-                continue;
-            }
+//            if (!checkTaskInstanceNeedFailover(workerServers, taskInstance)) {
+//                continue;
+//            }
 
             // only failover the task owned myself if worker down.
             if (!processInstance.getHost().equalsIgnoreCase(getLocalAddress())) {
@@ -416,8 +416,8 @@ public class MasterRegistryClient {
             return;
         }
 
-        Date serverStartupTime = getServerStartupTime(NodeType.MASTER, masterHost);
-        List<Server> workerServers = registryClient.getServerList(NodeType.WORKER);
+//        Date serverStartupTime = getServerStartupTime(NodeType.MASTER, masterHost);
+//        List<Server> workerServers = registryClient.getServerList(NodeType.WORKER);
 
         long startTime = System.currentTimeMillis();
         List<ProcessInstance> needFailoverProcessInstanceList = processService.queryNeedFailoverProcessInstances(masterHost);
@@ -436,17 +436,17 @@ public class MasterRegistryClient {
                 if (taskInstance.getState().typeIsFinished()) {
                     continue;
                 }
-                if (!checkTaskInstanceNeedFailover(workerServers, taskInstance)) {
-                    continue;
-                }
+//                if (!checkTaskInstanceNeedFailover(workerServers, taskInstance)) {
+//                    continue;
+//                }
                 logger.info("failover task instance id: {}, process instance id: {}", taskInstance.getId(), taskInstance.getProcessInstanceId());
                 failoverTaskInstance(processInstance, taskInstance);
             }
 
-            if (serverStartupTime != null && processInstance.getRestartTime() != null
-                    && processInstance.getRestartTime().after(serverStartupTime)) {
-                continue;
-            }
+//            if (serverStartupTime != null && processInstance.getRestartTime() != null
+//                    && processInstance.getRestartTime().after(serverStartupTime)) {
+//                continue;
+//            }
 
             logger.info("failover process instance id: {}", processInstance.getId());
             //updateProcessInstance host is null and insert into command
@@ -505,36 +505,36 @@ public class MasterRegistryClient {
     /**
      * registry
      */
-    public void registry() {
-        String address = NetUtils.getAddr(masterConfig.getListenPort());
-        localNodePath = getMasterPath();
-        int masterHeartbeatInterval = masterConfig.getMasterHeartbeatInterval();
-        HeartBeatTask heartBeatTask = new HeartBeatTask(startupTime,
-                masterConfig.getMasterMaxCpuloadAvg(),
-                masterConfig.getMasterReservedMemory(),
-                Sets.newHashSet(getMasterPath()),
-                Constants.MASTER_TYPE,
-                registryClient);
-
-        // remove before persist
-        registryClient.remove(localNodePath);
-        registryClient.persistEphemeral(localNodePath, heartBeatTask.getHeartBeatInfo());
-
-        while (!registryClient.checkNodeExists(NetUtils.getHost(), NodeType.MASTER)) {
-            ThreadUtils.sleep(SLEEP_TIME_MILLIS);
-        }
-
-        // sleep 1s, waiting master failover remove
-        ThreadUtils.sleep(SLEEP_TIME_MILLIS);
-
-        // delete dead server
-        registryClient.handleDeadServer(Collections.singleton(localNodePath), NodeType.MASTER, Constants.DELETE_OP);
-
-        registryClient.addConnectionStateListener(this::handleConnectionState);
-        this.heartBeatExecutor.scheduleAtFixedRate(heartBeatTask, masterHeartbeatInterval, masterHeartbeatInterval, TimeUnit.SECONDS);
-        logger.info("master node : {} registry to ZK successfully with heartBeatInterval : {}s", address, masterHeartbeatInterval);
-
-    }
+//    public void registry() {
+//        String address = NetUtils.getAddr(masterConfig.getListenPort());
+//        localNodePath = getMasterPath();
+//        int masterHeartbeatInterval = masterConfig.getMasterHeartbeatInterval();
+//        HeartBeatTask heartBeatTask = new HeartBeatTask(startupTime,
+//                masterConfig.getMasterMaxCpuloadAvg(),
+//                masterConfig.getMasterReservedMemory(),
+//                Sets.newHashSet(getMasterPath()),
+//                Constants.MASTER_TYPE,
+//                registryClient);
+//
+//        // remove before persist
+//        registryClient.remove(localNodePath);
+//        registryClient.persistEphemeral(localNodePath, heartBeatTask.getHeartBeatInfo());
+//
+//        while (!registryClient.checkNodeExists(NetUtils.getHost(), NodeType.MASTER)) {
+//            ThreadUtils.sleep(SLEEP_TIME_MILLIS);
+//        }
+//
+//        // sleep 1s, waiting master failover remove
+//        ThreadUtils.sleep(SLEEP_TIME_MILLIS);
+//
+//        // delete dead server
+//        registryClient.handleDeadServer(Collections.singleton(localNodePath), NodeType.MASTER, Constants.DELETE_OP);
+//
+//        registryClient.addConnectionStateListener(this::handleConnectionState);
+//        this.heartBeatExecutor.scheduleAtFixedRate(heartBeatTask, masterHeartbeatInterval, masterHeartbeatInterval, TimeUnit.SECONDS);
+//        logger.info("master node : {} registry to ZK successfully with heartBeatInterval : {}s", address, masterHeartbeatInterval);
+//
+//    }
 
     public void handleConnectionState(ConnectionState state) {
         switch (state) {
@@ -546,11 +546,11 @@ public class MasterRegistryClient {
                 break;
             case RECONNECTED:
                 logger.debug("registry connection state is {}, clean the node info", state);
-                registryClient.persistEphemeral(localNodePath, "");
+//                registryClient.persistEphemeral(localNodePath, "");
                 break;
             case DISCONNECTED:
                 logger.warn("registry connection state is {}, ready to stop myself", state);
-                registryClient.getStoppable().stop("registry connection state is DISCONNECTED, stop myself");
+//                registryClient.getStoppable().stop("registry connection state is DISCONNECTED, stop myself");
                 break;
             default:
         }
@@ -559,12 +559,12 @@ public class MasterRegistryClient {
     public void deregister() {
         try {
             String address = getLocalAddress();
-            String localNodePath = getMasterPath();
-            registryClient.remove(localNodePath);
+//            String localNodePath = getMasterPath();
+//            registryClient.remove(localNodePath);
             logger.info("master node : {} unRegistry to register center.", address);
             heartBeatExecutor.shutdown();
             logger.info("heartbeat executor shutdown");
-            registryClient.close();
+//            registryClient.close();
         } catch (Exception e) {
             logger.error("remove registry path exception ", e);
         }

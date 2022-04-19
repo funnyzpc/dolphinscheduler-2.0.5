@@ -18,6 +18,7 @@
 package org.apache.dolphinscheduler.server.master.dispatch;
 
 
+import org.apache.dolphinscheduler.common.utils.NetUtils;
 import org.apache.dolphinscheduler.remote.utils.Host;
 import org.apache.dolphinscheduler.server.master.dispatch.context.ExecutionContext;
 import org.apache.dolphinscheduler.server.master.dispatch.enums.ExecutorType;
@@ -30,6 +31,7 @@ import org.apache.commons.lang.StringUtils;
 
 import java.util.concurrent.ConcurrentHashMap;
 
+import org.apache.dolphinscheduler.server.worker.config.WorkerConfig;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -52,6 +54,8 @@ public class ExecutorDispatcher implements InitializingBean {
     @Autowired
     private HostManager hostManager;
 
+    @Autowired
+    private WorkerConfig workerConfig;
     /**
      * executor manager
      */
@@ -83,13 +87,14 @@ public class ExecutorDispatcher implements InitializingBean {
         /**
          * host select
          */
-
-        Host host = hostManager.select(context);
-        if (StringUtils.isEmpty(host.getAddress())) {
-            throw new ExecuteException(String.format("fail to execute : %s due to no suitable worker, "
-                            + "current task needs worker group %s to execute",
-                    context.getCommand(),context.getWorkerGroup()));
-        }
+        String addr = NetUtils.getAddr(workerConfig.getListenPort());
+        Host host = new Host(addr);
+//        Host host = hostManager.select(context);
+//        if (StringUtils.isEmpty(host.getAddress())) {
+//            throw new ExecuteException(String.format("fail to execute : %s due to no suitable worker, "
+//                            + "current task needs worker group %s to execute",
+//                    context.getCommand(),context.getWorkerGroup()));
+//        }
         context.setHost(host);
         executorManager.beforeExecute(context);
         try {

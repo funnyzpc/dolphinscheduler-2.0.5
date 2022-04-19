@@ -352,7 +352,9 @@ public class NettyRemotingClient {
         ChannelFuture future;
         try {
             synchronized (bootstrap) {
+                // TODO:: shadow 这里似乎有些许不妥~
                 future = bootstrap.connect(new InetSocketAddress(host.getIp(), host.getPort()));
+//                future = bootstrap.connect(new InetSocketAddress("127.0.0.1", 1234));
             }
             if (isSync) {
                 future.sync();

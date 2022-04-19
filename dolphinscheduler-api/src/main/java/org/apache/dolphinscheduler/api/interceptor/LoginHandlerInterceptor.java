@@ -56,7 +56,7 @@ public class LoginHandlerInterceptor implements HandlerInterceptor {
      * @return boolean true or false
      */
     @Override
-    public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) {
+    public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception{
 
         // get token
         String token = request.getHeader("token");
@@ -66,6 +66,7 @@ public class LoginHandlerInterceptor implements HandlerInterceptor {
             // if user is null
             if (user == null) {
                 response.setStatus(HttpStatus.SC_UNAUTHORIZED);
+                response.getWriter().write("{\"msg\":\"user does not exist\",\"status\":0,\"timestamp\":"+System.currentTimeMillis()+"}");
                 logger.info("user does not exist");
                 return false;
             }

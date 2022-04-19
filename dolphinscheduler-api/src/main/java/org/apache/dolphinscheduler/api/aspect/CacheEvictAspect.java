@@ -17,12 +17,12 @@
 
 package org.apache.dolphinscheduler.api.aspect;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.dolphinscheduler.common.enums.CacheType;
 import org.apache.dolphinscheduler.remote.command.CacheExpireCommand;
 import org.apache.dolphinscheduler.service.cache.CacheNotifyService;
 import org.apache.dolphinscheduler.service.cache.impl.CacheKeyGenerator;
 
-import org.apache.commons.lang3.StringUtils;
 
 import java.lang.reflect.Method;
 import java.util.Arrays;
@@ -96,9 +96,9 @@ public class CacheEvictAspect {
                     cacheKey = parseKey(cacheEvict.key(), Arrays.asList(args));
                 }
             }
-            if (StringUtils.isNotEmpty(cacheKey)) {
-                cacheNotifyService.notifyMaster(new CacheExpireCommand(cacheType, cacheKey).convert2Command());
-            }
+//            if (StringUtils.isNotEmpty(cacheKey)) {
+//                cacheNotifyService.notifyMaster(new CacheExpireCommand(cacheType, cacheKey).convert2Command());
+//            }
         }
 
         return result;

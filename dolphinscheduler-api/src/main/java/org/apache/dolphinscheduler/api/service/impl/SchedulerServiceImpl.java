@@ -275,11 +275,11 @@ public class SchedulerServiceImpl extends BaseServiceImpl implements SchedulerSe
         Map<String, Object> result = new HashMap<>();
 
         Project project = projectMapper.queryByCode(projectCode);
-        // check project auth
-        boolean hasProjectAndPerm = projectService.hasProjectAndPerm(loginUser, project, result);
-        if (!hasProjectAndPerm) {
-            return result;
-        }
+//        // check project auth
+//        boolean hasProjectAndPerm = projectService.hasProjectAndPerm(loginUser, project, result);
+//        if (!hasProjectAndPerm) {
+//            return result;
+//        }
 
         // check schedule exists
         Schedule scheduleObj = scheduleMapper.selectById(id);
@@ -335,13 +335,13 @@ public class SchedulerServiceImpl extends BaseServiceImpl implements SchedulerSe
             }
         }
 
-        // check master server exists
-        List<Server> masterServers = monitorService.getServerListFromRegistry(true);
-
-        if (masterServers.isEmpty()) {
-            putMsg(result, Status.MASTER_NOT_EXISTS);
-            return result;
-        }
+//        // check master server exists
+//        List<Server> masterServers = monitorService.getServerListFromRegistry(true);
+//
+//        if (masterServers.isEmpty()) {
+//            putMsg(result, Status.MASTER_NOT_EXISTS);
+//            return result;
+//        }
 
         // set status
         scheduleObj.setReleaseState(scheduleStatus);
@@ -351,11 +351,11 @@ public class SchedulerServiceImpl extends BaseServiceImpl implements SchedulerSe
         try {
             switch (scheduleStatus) {
                 case ONLINE:
-                    logger.info("Call master client set schedule online, project id: {}, flow id: {},host: {}", project.getId(), processDefinition.getId(), masterServers);
+                    logger.info("Call master client set schedule online, project id: {}, flow id: {},host: {}", project.getId(), processDefinition.getId(), "masterServers");
                     setSchedule(project.getId(), scheduleObj);
                     break;
                 case OFFLINE:
-                    logger.info("Call master client set schedule offline, project id: {}, flow id: {},host: {}", project.getId(), processDefinition.getId(), masterServers);
+                    logger.info("Call master client set schedule offline, project id: {}, flow id: {},host: {}", project.getId(), processDefinition.getId(), "masterServers");
                     deleteSchedule(project.getId(), id);
                     break;
                 default:

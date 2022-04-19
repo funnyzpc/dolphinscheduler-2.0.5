@@ -256,7 +256,7 @@ public class SqlTask extends AbstractTaskExecutor {
             logger.info("display sql result {} rows as follows:", displayRows);
             for (int i = 0; i < displayRows; i++) {
                 String row = JSONUtils.toJsonString(resultJSONArray.get(i));
-                logger.info("row {} : {}", i + 1, row);
+                logger.info("{} => {}", i + 1, row);
             }
             if (resultSet.next()) {
                 logger.info("sql result limit : {} exceeding results are filtered", limit);

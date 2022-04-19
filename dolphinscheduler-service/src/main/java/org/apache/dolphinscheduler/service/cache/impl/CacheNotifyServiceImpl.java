@@ -47,8 +47,8 @@ public class CacheNotifyServiceImpl implements CacheNotifyService {
 
     private final Logger logger = LoggerFactory.getLogger(CacheNotifyServiceImpl.class);
 
-    @Autowired
-    private RegistryClient registryClient;
+//    @Autowired
+//    private RegistryClient registryClient;
 
     /**
      * remote channels
@@ -106,30 +106,30 @@ public class CacheNotifyServiceImpl implements CacheNotifyService {
         return remoteChannel;
     }
 
-    /**
-     * send result to master
-     *
-     * @param command command
-     */
-    @Override
-    public void notifyMaster(Command command) {
-        logger.info("send result, command:{}", command.toString());
-        try {
-            List<Server> serverList = registryClient.getServerList(NodeType.MASTER);
-            if (CollectionUtils.isEmpty(serverList)) {
-                return;
-            }
-
-            for (Server server : serverList) {
-                Host host = new Host(server.getHost(), server.getPort());
-                NettyRemoteChannel nettyRemoteChannel = getRemoteChannel(host);
-                if (nettyRemoteChannel == null) {
-                    continue;
-                }
-                nettyRemoteChannel.writeAndFlush(command);
-            }
-        } catch (Exception e) {
-            logger.error("notify master error", e);
-        }
-    }
+//    /**
+//     * send result to master
+//     *
+//     * @param command command
+//     */
+//    @Override
+//    public void notifyMaster(Command command) {
+//        logger.info("send result, command:{}", command.toString());
+//        try {
+//            List<Server> serverList = registryClient.getServerList(NodeType.MASTER);
+//            if (CollectionUtils.isEmpty(serverList)) {
+//                return;
+//            }
+//
+//            for (Server server : serverList) {
+//                Host host = new Host(server.getHost(), server.getPort());
+//                NettyRemoteChannel nettyRemoteChannel = getRemoteChannel(host);
+//                if (nettyRemoteChannel == null) {
+//                    continue;
+//                }
+//                nettyRemoteChannel.writeAndFlush(command);
+//            }
+//        } catch (Exception e) {
+//            logger.error("notify master error", e);
+//        }
+//    }
 }

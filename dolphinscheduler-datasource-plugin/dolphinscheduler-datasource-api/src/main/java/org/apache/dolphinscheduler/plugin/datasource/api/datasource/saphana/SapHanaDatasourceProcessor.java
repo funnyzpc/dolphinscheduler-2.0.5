@@ -41,15 +41,15 @@ public class SapHanaDatasourceProcessor extends AbstractDatasourceProcessor {
 
     private final Logger logger = LoggerFactory.getLogger(SapHanaDatasourceProcessor.class);
 
-    private static final String ALLOW_LOAD_LOCAL_IN_FILE_NAME = "allowLoadLocalInfile";
+//    private static final String ALLOW_LOAD_LOCAL_IN_FILE_NAME = "allowLoadLocalInfile";
 
-    private static final String AUTO_DESERIALIZE = "autoDeserialize";
+//    private static final String AUTO_DESERIALIZE = "autoDeserialize";
 
-    private static final String ALLOW_LOCAL_IN_FILE_NAME = "allowLocalInfile";
+//    private static final String ALLOW_LOCAL_IN_FILE_NAME = "allowLocalInfile";
 
-    private static final String ALLOW_URL_IN_LOCAL_IN_FILE_NAME = "allowUrlInLocalInfile";
+//    private static final String ALLOW_URL_IN_LOCAL_IN_FILE_NAME = "allowUrlInLocalInfile";
 
-    private static final String APPEND_PARAMS = "allowLoadLocalInfile=false&autoDeserialize=false&allowLocalInfile=false&allowUrlInLocalInfile=false";
+//    private static final String APPEND_PARAMS = "allowLoadLocalInfile=false&autoDeserialize=false&allowLocalInfile=false&allowUrlInLocalInfile=false";
 
     @Override
     public BaseDataSourceParamDTO createDatasourceParamDTO(String connectionJson) {
@@ -109,9 +109,11 @@ public class SapHanaDatasourceProcessor extends AbstractDatasourceProcessor {
         SapHanaConnectionParam sapHanaConnectionParam = (SapHanaConnectionParam) connectionParam;
         String jdbcUrl = sapHanaConnectionParam.getJdbcUrl();
         if (!StringUtils.isEmpty(sapHanaConnectionParam.getOther())) {
-            return String.format("%s?%s&%s", jdbcUrl, sapHanaConnectionParam.getOther(), APPEND_PARAMS);
+//            return String.format("%s?%s&%s", jdbcUrl, sapHanaConnectionParam.getOther(), APPEND_PARAMS);
+            return String.format("%s?%s", jdbcUrl, sapHanaConnectionParam.getOther());
         }
-        return String.format("%s?%s", jdbcUrl, APPEND_PARAMS);
+//        return String.format("%s?%s", jdbcUrl, APPEND_PARAMS);
+        return String.format("%s", jdbcUrl);
     }
 
     @Override
@@ -119,15 +121,15 @@ public class SapHanaDatasourceProcessor extends AbstractDatasourceProcessor {
         SapHanaConnectionParam sapHanaConnectionParam = (SapHanaConnectionParam) connectionParam;
         Class.forName(getDatasourceDriver());
         String user = sapHanaConnectionParam.getUser();
-        if (user.contains(AUTO_DESERIALIZE)) {
-            logger.warn("sensitive param : {} in username field is filtered", AUTO_DESERIALIZE);
-            user = user.replace(AUTO_DESERIALIZE, "");
-        }
+//        if (user.contains(AUTO_DESERIALIZE)) {
+//            logger.warn("sensitive param : {} in username field is filtered", AUTO_DESERIALIZE);
+//            user = user.replace(AUTO_DESERIALIZE, "");
+//        }
         String password = PasswordUtils.decodePassword(sapHanaConnectionParam.getPassword());
-        if (password.contains(AUTO_DESERIALIZE)) {
-            logger.warn("sensitive param : {} in password field is filtered", AUTO_DESERIALIZE);
-            password = password.replace(AUTO_DESERIALIZE, "");
-        }
+//        if (password.contains(AUTO_DESERIALIZE)) {
+//            logger.warn("sensitive param : {} in password field is filtered", AUTO_DESERIALIZE);
+//            password = password.replace(AUTO_DESERIALIZE, "");
+//        }
         return DriverManager.getConnection(getJdbcUrl(connectionParam), user, password);
     }
 
@@ -142,9 +144,9 @@ public class SapHanaDatasourceProcessor extends AbstractDatasourceProcessor {
         }
         Map<String, String> otherMap = new HashMap<>();
         paramMap.forEach((k, v) -> {
-            if (!checkKeyIsLegitimate(k)) {
-                return;
-            }
+//            if (!checkKeyIsLegitimate(k)) {
+//                return;
+//            }
             otherMap.put(k, v);
         });
         if (MapUtils.isEmpty(otherMap)) {
@@ -155,12 +157,12 @@ public class SapHanaDatasourceProcessor extends AbstractDatasourceProcessor {
         return stringBuilder.toString();
     }
 
-    private static boolean checkKeyIsLegitimate(String key) {
-        return !key.contains(ALLOW_LOAD_LOCAL_IN_FILE_NAME)
-                && !key.contains(AUTO_DESERIALIZE)
-                && !key.contains(ALLOW_LOCAL_IN_FILE_NAME)
-                && !key.contains(ALLOW_URL_IN_LOCAL_IN_FILE_NAME);
-    }
+//    private static boolean checkKeyIsLegitimate(String key) {
+//        return !key.contains(ALLOW_LOAD_LOCAL_IN_FILE_NAME)
+//                && !key.contains(AUTO_DESERIALIZE)
+//                && !key.contains(ALLOW_LOCAL_IN_FILE_NAME)
+//                && !key.contains(ALLOW_URL_IN_LOCAL_IN_FILE_NAME);
+//    }
 
     private Map<String, String> parseOther(String other) {
         if (StringUtils.isEmpty(other)) {

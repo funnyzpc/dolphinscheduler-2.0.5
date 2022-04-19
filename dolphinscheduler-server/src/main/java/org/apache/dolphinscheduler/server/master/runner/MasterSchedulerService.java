@@ -70,11 +70,11 @@ public class MasterSchedulerService extends Thread {
     @Autowired
     private ProcessService processService;
 
-    /**
-     * zookeeper master client
-     */
-    @Autowired
-    private MasterRegistryClient masterRegistryClient;
+//    /**
+//     * zookeeper master client
+//     */
+//    @Autowired
+//    private MasterRegistryClient masterRegistryClient;
 
     /**
      * master config
@@ -159,7 +159,7 @@ public class MasterSchedulerService extends Thread {
         masterExecService.shutdown();
         boolean terminated = false;
         try {
-            terminated = masterExecService.awaitTermination(5, TimeUnit.SECONDS);
+            terminated = masterExecService.awaitTermination(6, TimeUnit.SECONDS);
         } catch (InterruptedException ignore) {
             Thread.currentThread().interrupt();
         }
@@ -236,20 +236,21 @@ public class MasterSchedulerService extends Thread {
         int pageNumber = 0;
         Command result = null;
         while (Stopper.isRunning()) {
-            if (ServerNodeManager.MASTER_SIZE == 0) {
-                return null;
-            }
+//            if (ServerNodeManager.MASTER_SIZE == 0) {
+//                return null;
+//            }
             logger.debug("master size:{}",ServerNodeManager.MASTER_SIZE);
-            List<Command> commandList = processService.findCommandPage(ServerNodeManager.MASTER_SIZE, pageNumber);
+//            List<Command> commandList = processService.findCommandPage(ServerNodeManager.MASTER_SIZE, pageNumber);
+            List<Command> commandList = processService.findCommandPage(8, pageNumber);
             if (commandList.size() == 0) {
                 return null;
             }
             for (Command command : commandList) {
-                int slot = ServerNodeManager.getSlot();
-                if (ServerNodeManager.MASTER_SIZE != 0 && command.getId() % ServerNodeManager.MASTER_SIZE == slot) {
+//                int slot = ServerNodeManager.getSlot();
+//                if (ServerNodeManager.MASTER_SIZE != 0 && command.getId() % ServerNodeManager.MASTER_SIZE == slot) {
                     result = command;
                     break;
-                }
+//                }
             }
             if (result != null) {
                 logger.info("find command {}, slot:{} :", result.getId(), ServerNodeManager.getSlot());

@@ -48,7 +48,7 @@ public class LoginHandlerInterceptorTest extends AbstractControllerTest {
     private UserMapper userMapper;
 
     @Test
-    public void testPreHandle() {
+    public void testPreHandle() throws Exception{
         HttpServletRequest request = Mockito.mock(HttpServletRequest.class);
         HttpServletResponse response = Mockito.mock(HttpServletResponse.class);
         // test no token and no cookie

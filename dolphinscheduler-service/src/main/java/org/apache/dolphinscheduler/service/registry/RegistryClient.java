@@ -38,12 +38,7 @@ import org.apache.dolphinscheduler.common.model.Server;
 import org.apache.dolphinscheduler.common.utils.HeartBeat;
 import org.apache.dolphinscheduler.common.utils.JSONUtils;
 import org.apache.dolphinscheduler.common.utils.PropertyUtils;
-import org.apache.dolphinscheduler.registry.api.ConnectionListener;
-import org.apache.dolphinscheduler.registry.api.Registry;
-import org.apache.dolphinscheduler.registry.api.RegistryException;
-import org.apache.dolphinscheduler.registry.api.RegistryFactory;
-import org.apache.dolphinscheduler.registry.api.RegistryFactoryLoader;
-import org.apache.dolphinscheduler.registry.api.SubscribeListener;
+
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -58,13 +53,13 @@ import java.util.stream.Collectors;
 
 import javax.annotation.PostConstruct;
 
+import org.apache.dolphinscheduler.registry.api.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.stereotype.Component;
 
 import com.google.common.base.Strings;
 
-@Component
+//@Component
 public class RegistryClient {
     private static final Logger logger = LoggerFactory.getLogger(RegistryClient.class);
 

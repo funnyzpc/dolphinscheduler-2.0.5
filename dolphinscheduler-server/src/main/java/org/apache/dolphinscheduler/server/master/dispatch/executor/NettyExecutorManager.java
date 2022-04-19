@@ -161,7 +161,7 @@ public class NettyExecutorManager extends AbstractExecutorManager<Boolean>{
                 nettyRemotingClient.send(host, command);
                 success = true;
             } catch (Exception ex) {
-                logger.error(String.format("send command : %s to %s error", command, host), ex);
+                logger.error("send command : {} to {} error", command, host, ex);
                 retryCount--;
                 ThreadUtils.sleep(100);
             }

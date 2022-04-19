@@ -375,6 +375,8 @@ public class DataxTask extends AbstractTaskExecutor {
      */
     private String buildShellCommandFile(String jobConfigFilePath, Map<String, Property> paramsMap)
             throws Exception {
+        logger.info("paramsMap=>{}",JSONUtils.toJsonString(paramsMap));
+        System.out.println("paramsMap=>{}"+JSONUtils.toJsonString(paramsMap));
         // generate scripts
         String fileName = String.format("%s/%s_node.%s",
                 taskExecutionContext.getExecutePath(),
@@ -399,7 +401,8 @@ public class DataxTask extends AbstractTaskExecutor {
         // replace placeholder
         String dataxCommand = ParameterUtils.convertParameterPlaceholders(sbr.toString(), ParamUtils.convert(paramsMap));
 
-        logger.debug("raw script : {}", dataxCommand);
+        logger.info("raw script : {}", dataxCommand);
+        System.out.println(dataxCommand);
 
         // create shell command file
         Set<PosixFilePermission> perms = PosixFilePermissions.fromString(RWXR_XR_X);
@@ -525,7 +528,7 @@ public class DataxTask extends AbstractTaskExecutor {
                 columnNames[i] = columnName;
             }
         } catch (Exception e) {
-            logger.warn(e.getMessage(), e);
+            logger.error(e.getMessage(), e);
             return new String[0];
         }
 
