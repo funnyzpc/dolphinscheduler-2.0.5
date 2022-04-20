@@ -19,7 +19,7 @@
     <div class="content-p">
       <div class="create-datasource-model">
         <m-list-box-f>
-          <template slot="name"><strong>*</strong>{{$t('Datasource')}}-99</template><!-- 数据源 -->
+          <template slot="name"><strong>*</strong>数据源</template><!-- 数据源 -->
           <template slot="content" size="small">
               <el-select style="width: 100%;" v-model="type" :disabled="this.item.id">
                 <el-option v-for="item in datasourceTypeList" :key="item.value" :value="item.value" :label="item.label">
