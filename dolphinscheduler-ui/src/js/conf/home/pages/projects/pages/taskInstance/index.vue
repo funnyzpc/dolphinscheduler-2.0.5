@@ -16,7 +16,7 @@
  */
 <template>
   <div class="wrap-taskInstance">
-    <m-list-construction :title="$t('Task Instance')">
+    <m-list-construction title="任务实例">
       <template slot="conditions">
         <m-instance-conditions @on-query="_onQuery"></m-instance-conditions>
       </template>
@@ -210,6 +210,9 @@
       .el-dialog__header, .el-dialog__body {
         padding: 0;
       }
+    }
+    body .home-main .conditions-model{
+      display: inline-block !important;
     }
   }
 </style>

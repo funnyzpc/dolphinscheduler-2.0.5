@@ -80,10 +80,10 @@ body{
       //background: #f8fbfe;
     }
     .conditions-model {
-      display: flex;
+      display: inline-block;
       justify-content: space-between;
       align-items: center;
-      margin: 10px 0;
+      margin: 10px 8px;
       .left {
         margin-left: 12px;
       }

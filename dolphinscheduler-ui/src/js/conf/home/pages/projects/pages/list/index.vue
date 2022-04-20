@@ -19,7 +19,7 @@
     <template slot="conditions">
       <m-conditions @on-conditions="_onConditions">
         <template slot="button-group">
-          <el-button size="mini" @click="_create('')">{{ $t('Create Project') }}</el-button>
+          <el-button @click="_create('')">创建项目</el-button>
           <el-dialog
             :title="item ? $t('Edit') : $t('Create Project')"
             v-if="createProjectDialog"

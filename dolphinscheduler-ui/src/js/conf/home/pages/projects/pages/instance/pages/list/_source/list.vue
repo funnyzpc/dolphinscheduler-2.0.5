@@ -233,7 +233,7 @@
         :title="$t('Delete?')"
         @onConfirm="_delete({},-1)"
       >
-        <el-button style="position: absolute; bottom: -48px; left: 19px;"  type="primary" size="mini" :disabled="!strDelete" slot="reference">{{$t('Delete')}}</el-button>
+        <el-button style="bottom: -48px; left: 19px;"  type="primary" size="mini" :disabled="!strDelete" slot="reference">删除</el-button>
       </el-popconfirm>
     </el-tooltip>
   </div>
