@@ -58,6 +58,19 @@ public interface TaskInstanceService {
                                Integer pageNo,
                                Integer pageSize);
 
+    Result findPage(long projectCode,
+                    Integer processInstanceId,
+                    String processInstanceName,
+                    String taskName,
+                    String executorName,
+                    String startDate,
+                    String endDate,
+                    String searchVal,
+                    ExecutionStatus stateType,
+                    String host,
+                    Integer pageNo,
+                    Integer pageSize);
+
     /**
      * change one task instance's state from failure to forced success
      *

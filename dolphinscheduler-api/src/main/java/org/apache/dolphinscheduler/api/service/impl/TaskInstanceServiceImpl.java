@@ -22,6 +22,7 @@ import org.apache.dolphinscheduler.api.service.ProcessInstanceService;
 import org.apache.dolphinscheduler.api.service.ProjectService;
 import org.apache.dolphinscheduler.api.service.TaskInstanceService;
 import org.apache.dolphinscheduler.api.service.UsersService;
+import org.apache.dolphinscheduler.api.utils.DateUtil;
 import org.apache.dolphinscheduler.api.utils.PageInfo;
 import org.apache.dolphinscheduler.api.utils.Result;
 import org.apache.dolphinscheduler.common.Constants;
@@ -37,11 +38,8 @@ import org.apache.dolphinscheduler.dao.mapper.TaskDefinitionMapper;
 import org.apache.dolphinscheduler.dao.mapper.TaskInstanceMapper;
 import org.apache.dolphinscheduler.service.process.ProcessService;
 
-import java.util.Date;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.time.LocalDateTime;
+import java.util.*;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -134,7 +132,7 @@ public class TaskInstanceServiceImpl extends BaseServiceImpl implements TaskInst
         int executorId = usersService.getUserIdByName(executorName);
         IPage<TaskInstance> taskInstanceIPage = taskInstanceMapper.queryTaskInstanceListPaging(
 //            page, project.getCode(), processInstanceId, processInstanceName, searchVal, taskName, executorId, statusArray, host, start, end
-            page, project.getCode(), processInstanceId, processInstanceName, searchVal, taskName, executorId, statusArray, host/*, null, null*/
+            page, project.getCode(), processInstanceId, processInstanceName, searchVal, null==taskName?"":taskName, executorId, statusArray, host/*, null, null*/
         );
         Set<String> exclusionSet = new HashSet<>();
         exclusionSet.add(Constants.CLASS);
@@ -150,6 +148,62 @@ public class TaskInstanceServiceImpl extends BaseServiceImpl implements TaskInst
         }
         pageInfo.setTotal((int) taskInstanceIPage.getTotal());
         pageInfo.setTotalList(CollectionUtils.getListByExclusion(taskInstanceIPage.getRecords(), exclusionSet));
+        result.setData(pageInfo);
+        putMsg(result, Status.SUCCESS);
+        return result;
+    }
+
+    @Override
+    public Result findPage(long projectCode,
+                           Integer processInstanceId,
+                           String processInstanceName,
+                           String taskName,
+                           String executorName,
+                           String startDate,
+                           String endDate,
+                           String searchVal,
+                           ExecutionStatus stateType,
+                           String host,
+                           Integer pageNo,
+                           Integer pageSize) {
+//        Project project = projectMapper.queryByCode(projectCode);
+
+        Page<TaskInstance> page = new Page<>(pageNo, pageSize);
+        PageInfo<Map<String, Object>> pageInfo = new PageInfo<>(pageNo, pageSize);
+        int executorId = usersService.getUserIdByName(executorName);
+
+        Map<String,Object> param = new HashMap<>(8,1);
+        param.put("projectCode",projectCode);
+//        param.put("projectCode",project.getCode());
+        param.put("processInstanceId",processInstanceId);
+        param.put("processInstanceName",null==processInstanceName?null:"%"+processInstanceName.replaceAll("\t","").trim()+"%");
+        param.put("searchVal",(null==searchVal || "".equals(searchVal.trim()))?null:"%"+searchVal.trim()+"%");
+        param.put("taskName",taskName);
+        param.put("executorId",executorId);
+        param.put("states",null==stateType?null:stateType.ordinal());
+        param.put("host",(null==host || "".equals(host.trim()))?null:"%"+host+"%");
+        String startTime = (null==startDate || "".equals(startDate))?null: startDate.trim();
+        String endTime = (null==endDate || "".equals(endDate))?null:endDate.trim();
+        param.put("startTime",null!=startTime? LocalDateTime.parse(startTime,DateUtil.FORMAT_DAY_TIME):null);
+        param.put("endTime",null!=endTime? LocalDateTime.parse(endTime,DateUtil.FORMAT_DAY_TIME):null);
+
+        IPage<TaskInstance> taskInstanceIPage = taskInstanceMapper.findPage(page,param);
+
+        Set<String> exclusionSet = new HashSet<>();
+        exclusionSet.add(Constants.CLASS);
+        exclusionSet.add("taskJson");
+        List<TaskInstance> taskInstanceList = taskInstanceIPage.getRecords();
+        for (TaskInstance taskInstance : taskInstanceList) {
+            taskInstance.setDuration(DateUtils.format2Duration(taskInstance.getStartTime(), taskInstance.getEndTime()));
+            User executor = usersService.queryUser(taskInstance.getExecutorId());
+            if (null != executor) {
+                taskInstance.setExecutorName(executor.getUserName());
+            }
+        }
+        pageInfo.setTotal((int) taskInstanceIPage.getTotal());
+        pageInfo.setTotalList(CollectionUtils.getListByExclusion(taskInstanceIPage.getRecords(), exclusionSet));
+
+        Result result = new Result();
         result.setData(pageInfo);
         putMsg(result, Status.SUCCESS);
         return result;

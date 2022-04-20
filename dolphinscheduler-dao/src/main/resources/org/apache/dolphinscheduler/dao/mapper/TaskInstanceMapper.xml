@@ -168,6 +168,42 @@
         order by instance.start_time desc
     </select>
 
+    <select id="findPage" resultType="org.apache.dolphinscheduler.dao.entity.TaskInstance">
+        select
+        <include refid="baseSqlV2">
+            <property name="alias" value="instance"/>
+        </include>
+        ,
+        process.name as process_instance_name
+        from t_ds_task_instance instance
+        left join t_ds_task_definition_log define on define.code=instance.task_code and define.version=instance.task_definition_version
+        left join t_ds_process_instance process on process.id=instance.process_instance_id
+        where 1=1
+        <if test="p.projectCode != null"> and define.project_code = #{p.projectCode}</if>
+        <if test="p.startTime != null"> and instance.start_time >= #{p.startTime} </if>
+        <if test="p.endTime != null"> and instance.start_time &lt;= #{p.endTime} </if>
+        <if test="p.processInstanceId != 0">and instance.process_instance_id = #{p.processInstanceId}</if>
+        <if test="p.searchVal != null and p.searchVal != ''">
+            and instance.name like concat('%', #{p.searchVal}, '%')
+        </if>
+        <if test="p.taskName != null and p.taskName != ''">
+            and instance.name=#{p.taskName}
+        </if>
+        <if test="p.states != null and p.states.length != 0">
+            and instance.state =#{p.state}
+        </if>
+        <if test="p.host != null and p.host != ''">
+            and instance.host like  #{p.host}
+        </if>
+        <if test="p.executorId != 0">
+            and instance.executor_id = #{p.executorId}
+        </if>
+        <if test="p.processInstanceName != null and p.processInstanceName != ''">
+            and process.name like #{p.processInstanceName}
+        </if>
+        order by instance.start_time desc
+    </select>
+
     <update id="updateHostAndSubmitTimeById">
         update t_ds_task_instance
         set host        = #{host},

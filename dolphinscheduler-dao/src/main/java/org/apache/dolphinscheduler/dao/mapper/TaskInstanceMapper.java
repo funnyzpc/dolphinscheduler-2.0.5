@@ -26,6 +26,7 @@ import org.apache.ibatis.annotations.Param;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
@@ -73,6 +74,8 @@ public interface TaskInstanceMapper extends BaseMapper<TaskInstance> {
 //                                                    @Param("startTime") Date startTime,
 //                                                    @Param("endTime") Date endTime
     );
+
+    IPage<TaskInstance> findPage(IPage<TaskInstance> page,@Param("p") Map<String,Object> param);
 
     int updateHostAndSubmitTimeById(@Param("id") int id, @Param("host") String host, @Param("submitTime") Date submitTime);
 }
