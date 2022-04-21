@@ -21,6 +21,7 @@ import org.apache.dolphinscheduler.api.enums.Status;
 import org.apache.dolphinscheduler.api.exceptions.ServiceException;
 import org.apache.dolphinscheduler.api.service.LoggerService;
 import org.apache.dolphinscheduler.api.service.ProjectService;
+import org.apache.dolphinscheduler.api.service.impl.log.LoggerRequestProcessor;
 import org.apache.dolphinscheduler.api.utils.Result;
 import org.apache.dolphinscheduler.common.Constants;
 import org.apache.dolphinscheduler.dao.entity.Project;
@@ -29,6 +30,7 @@ import org.apache.dolphinscheduler.dao.entity.TaskInstance;
 import org.apache.dolphinscheduler.dao.entity.User;
 import org.apache.dolphinscheduler.dao.mapper.ProjectMapper;
 import org.apache.dolphinscheduler.dao.mapper.TaskDefinitionMapper;
+import org.apache.dolphinscheduler.remote.command.CommandType;
 import org.apache.dolphinscheduler.remote.utils.Host;
 import org.apache.dolphinscheduler.service.log.LogClientService;
 import org.apache.dolphinscheduler.service.process.ProcessService;
@@ -73,6 +75,9 @@ public class LoggerServiceImpl extends BaseServiceImpl implements LoggerService 
     @Autowired
     TaskDefinitionMapper taskDefinitionMapper;
 
+    @Autowired
+    LoggerRequestProcessor loggerRequestProcessor;
+
     @PostConstruct
     public void init() {
         if (Objects.isNull(this.logClient)) {
@@ -105,7 +110,8 @@ public class LoggerServiceImpl extends BaseServiceImpl implements LoggerService 
             return Result.error(Status.TASK_INSTANCE_NOT_FOUND);
         }
         Result<String> result = new Result<>(Status.SUCCESS.getCode(), Status.SUCCESS.getMsg());
-        String log = queryLog(taskInstance,skipLineNum,limit);
+//        String log = queryLog(taskInstance,skipLineNum,limit);
+        String log = queryLogNew(taskInstance,skipLineNum,limit);
         result.setData(log);
         return result;
     }
@@ -157,7 +163,8 @@ public class LoggerServiceImpl extends BaseServiceImpl implements LoggerService 
             putMsg(result, Status.TASK_INSTANCE_NOT_FOUND, taskInstId);
             return result;
         }
-        String log = queryLog(task, skipLineNum, limit);
+//        String log = queryLog(task, skipLineNum, limit);
+        String log = queryLogNew(task, skipLineNum, limit);
         result.put(Constants.DATA_LIST, log);
         return result;
     }
@@ -213,12 +220,9 @@ public class LoggerServiceImpl extends BaseServiceImpl implements LoggerService 
      * @return log string data
      */
     private String queryLog(TaskInstance taskInstance, int skipLineNum, int limit) {
-
         String host = getHost(taskInstance.getHost());
-
         logger.info("log host : {} , logPath : {} , logServer port : {}", host, taskInstance.getLogPath(),
                 Constants.RPC_PORT);
-
         StringBuilder log = new StringBuilder();
         if (skipLineNum == 0) {
             String head = String.format(LOG_HEAD_FORMAT,
@@ -227,11 +231,18 @@ public class LoggerServiceImpl extends BaseServiceImpl implements LoggerService 
                     Constants.SYSTEM_LINE_SEPARATOR);
             log.append(head);
         }
-
         log.append(logClient
                 .rollViewLog(host, Constants.RPC_PORT, taskInstance.getLogPath(), skipLineNum, limit));
-
         return log.toString();
+    }
+
+    private String queryLogNew(TaskInstance taskInstance, int skipLineNum, int limit) {
+        logger.info("log , logPath : {} , logServer port : {}", taskInstance.getLogPath(), Constants.RPC_PORT);
+        if(null==taskInstance || "".equals(taskInstance.getLogPath().trim())){
+            return "--EMPTY--";
+        }
+        String log_content = loggerRequestProcessor.process(CommandType.ROLL_VIEW_LOG_REQUEST, taskInstance.getLogPath(), skipLineNum, limit);
+        return log_content;
     }
 
     /**

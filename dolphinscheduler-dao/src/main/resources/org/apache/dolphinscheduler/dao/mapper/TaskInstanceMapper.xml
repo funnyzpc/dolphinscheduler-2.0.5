@@ -189,7 +189,7 @@
         <if test="p.taskName != null and p.taskName != ''">
             and instance.name=#{p.taskName}
         </if>
-        <if test="p.states != null and p.states.length != 0">
+        <if test="p.states != null">
             and instance.state =#{p.state}
         </if>
         <if test="p.host != null and p.host != ''">
@@ -201,7 +201,7 @@
         <if test="p.processInstanceName != null and p.processInstanceName != ''">
             and process.name like #{p.processInstanceName}
         </if>
-        order by instance.start_time desc
+        order by id desc,instance.start_time desc
     </select>
 
     <update id="updateHostAndSubmitTimeById">

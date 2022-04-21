@@ -15,6 +15,7 @@ sh ./bin/dolphinscheduler-daemon.sh stop standalone-server
 
 ## 打包指定模块
 mvn clean -Dmaven.test.skip=true package -Prelease -pl dolphinscheduler-datasource-plugin/dolphinscheduler-datasource-api -am
+mvn clean -Dmaven.test.skip=true package -Prelease -pl dolphinscheduler-api -am
 
 ## 前端
 + 依赖安装: npm install
