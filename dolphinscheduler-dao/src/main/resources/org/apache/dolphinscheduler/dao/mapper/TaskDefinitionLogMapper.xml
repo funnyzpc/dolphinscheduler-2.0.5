@@ -34,6 +34,7 @@
         from t_ds_task_definition_log
         WHERE code = #{code}
         and version = #{version}
+        order by id desc limit 1
     </select>
     <select id="queryByTaskDefinitions" resultType="org.apache.dolphinscheduler.dao.entity.TaskDefinitionLog">
         select
