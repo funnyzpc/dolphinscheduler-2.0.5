@@ -26,6 +26,7 @@ public class SapHanaDataSourceChannel implements DataSourceChannel {
 
     @Override
     public DataSourceClient createDataSourceClient(BaseConnectionParam baseConnectionParam, DbType dbType) {
+
         return new SapHanaDataSourceClient(baseConnectionParam, dbType);
     }
 }
