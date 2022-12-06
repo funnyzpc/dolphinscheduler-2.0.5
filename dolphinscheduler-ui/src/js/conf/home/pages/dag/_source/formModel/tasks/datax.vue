@@ -94,7 +94,7 @@
           <span>{{$t('SpeedRecord')}}</span>
         </div>
         <div slot="content">
-          <m-select-input v-model="jobSpeedRecord" :list="[0,500,1000,1500,2000,2500,3000,10000,20000]">
+          <m-select-input v-model="jobSpeedRecord" :list="[0,500,1000,1500,2000,2500,3000,5000,10000,20000]">
           </m-select-input>
           <span>({{$t('0 means unlimited by count')}})</span>
         </div>
@@ -131,11 +131,11 @@
         <span >{{$t('Min Memory')}}</span>
         <m-select-input v-model="xms" :list="[1,2,3,4]">
         </m-select-input>
-        <span>&nbsp;&nbsp;&nbsp;G &nbsp;&nbsp;</span>
+        <span>&nbsp;&nbsp;&nbsp;GB &nbsp;&nbsp;</span>
         <span >{{$t('Max Memory')}}</span>
         <m-select-input v-model="xmx" :list="[1,2,3,4]">
         </m-select-input>
-        <span>&nbsp;&nbsp;&nbsp;G</span>
+        <span>&nbsp;&nbsp;&nbsp;GB</span>
       </div>
     </m-list-box>
     <el-dialog
@@ -192,14 +192,14 @@
         // speed byte
         jobSpeedByte: 0,
         // speed record
-        jobSpeedRecord: 1000,
+        jobSpeedRecord: 10000,
         // Custom parameter
         localParams: [],
         customConfig: 0,
         // jvm memory xms
         xms: 1,
         // jvm memory xms
-        xmx: 1,
+        xmx: 2,
         scriptBoxDialog: false,
         item: ''
       }

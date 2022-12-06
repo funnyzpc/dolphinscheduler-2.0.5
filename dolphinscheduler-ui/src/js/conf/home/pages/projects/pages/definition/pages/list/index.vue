@@ -20,8 +20,9 @@
       <template slot="conditions">
         <m-conditions @on-conditions="_onConditions">
           <template slot="button-group">
-            <el-button @click="() => this.$router.push({name: 'definition-create'})">创建工作流</el-button>
-            <el-button @click="_uploading">{{$t('Import process')}}</el-button>
+	    <!-- 创建工作流 -->
+            <el-button size="mini"  @click="() => this.$router.push({name: 'definition-create'})">{{$t('Create process')}}</el-button>
+            <el-button size="mini"  @click="_uploading">{{$t('Import process')}}</el-button>
           </template>
         </m-conditions>
       </template>

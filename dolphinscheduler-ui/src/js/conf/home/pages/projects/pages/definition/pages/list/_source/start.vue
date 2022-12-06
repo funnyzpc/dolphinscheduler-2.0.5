@@ -24,12 +24,14 @@
     </div>
     <div class="clearfix list">
       <div class="text">
-        失败策略
+      	<!-- 失败策略 -->
+        {{$t('Failure Strategy')}}
       </div>
       <div class="cont">
         <el-radio-group v-model="failureStrategy" style="margin-top: 7px;" size="small">
-          <el-radio :label="'CONTINUE'">继续</el-radio>
-          <el-radio :label="'END'">结束</el-radio>
+	  <!-- 继续 and 结束 -->
+          <el-radio :label="'CONTINUE'">{{$t('Continue')}}</el-radio>
+          <el-radio :label="'END'">{{$t('End')}}</el-radio>
         </el-radio-group>
       </div>
     </div>
@@ -184,8 +186,8 @@
       </div>
     </div>
     <div class="clearfix list">
-<!--      <span class="text">{{$t('Whether dry-run')}}</span>-->
-      <span class="text">是否空跑001</span>
+      <span class="text">{{$t('Whether dry-run')}}</span>
+<!--      <span class="text">是否空跑001</span>-->
       <span class="cont" style="padding-top: 5px;">
           <el-switch v-model="dryRun" size="small" active-value="1" inactive-value="0"></el-switch>
       </span>

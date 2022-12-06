@@ -116,11 +116,12 @@
         :title="$t('Delete?')"
         @onConfirm="_delete({},-1)"
       >
-        <el-button style="bottom: -48px; left: 19px;"  type="primary" size="mini" :disabled="!strSelectCodes" slot="reference">删除</el-button>
+      <!-- 删除 -->
+        <el-button style="position: absolute; bottom: -48px; left: 19px;"  type="primary" size="mini" :disabled="!strSelectCodes" slot="reference">{{$t('Delete')}}</el-button>
       </el-popconfirm>
     </el-tooltip>
-    <el-button type="primary" size="mini" :disabled="!strSelectCodes" style="bottom: -48px; left: 80px;" @click="_batchExport(item)" >{{$t('Export')}}</el-button>
-    <span><el-button type="primary" size="mini" :disabled="!strSelectCodes" style="bottom: -48px; left: 140px;" @click="_batchCopy(item)" >批量复制</el-button></span>
+    <el-button type="primary" size="mini" :disabled="!strSelectCodes" style="position: absolute; bottom: -48px; left: 80px;" @click="_batchExport(item)" >{{$t('Export')}}</el-button>
+    <span><el-button type="primary" size="mini" :disabled="!strSelectCodes" style="position: absolute; bottom: -48px; left: 140px;" @click="_batchCopy(item)" >{{$t('Batch copy')}}</el-button></span>
 <!--    <el-button type="primary" size="mini" :disabled="!strSelectCodes" style="position: absolute; bottom: -48px; left: 225px;" @click="_batchMove(item)" >{{$t('Batch move')}}</el-button>-->
     <el-drawer
       :visible.sync="drawer"

@@ -48,19 +48,19 @@ const menu = {
       icon: 'el-icon-s-tools',
       children: [
         {
-          name: '工作流定义',
+          name: `${i18n.$t('Process definition')}`,
           path: 'definition',
           id: 0,
           enabled: true
         },
         {
-          name: '工作流实例',
+          name: `${i18n.$t('Process Instance')}`,
           path: 'instance',
           id: 1,
           enabled: true
         },
         {
-          name: '任务实例',
+          name: `${i18n.$t('Task Instance')}`,/*任务实例*/
           path: 'task-instance',
           id: 2,
           enabled: true

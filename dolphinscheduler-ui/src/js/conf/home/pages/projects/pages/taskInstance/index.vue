@@ -16,7 +16,8 @@
  */
 <template>
   <div class="wrap-taskInstance">
-    <m-list-construction title="任务实例">
+    <!-- 任务实例 -->
+    <m-list-construction :title="$t('Task Instance')">
       <template slot="conditions">
         <m-instance-conditions @on-query="_onQuery"></m-instance-conditions>
       </template>
